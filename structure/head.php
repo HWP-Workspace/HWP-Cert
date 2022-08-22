@@ -12,7 +12,7 @@ require('connect.php');
 
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>ระบบพิมพ์เกียรติบัตรออนไลน์ | <?= $nameschool_data ?></title>
+	<title>ระบบพิมพ์เกียรติบัตรออนไลน์ - <?= $nameschool_data ?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="img/fav.ico" type="image/x-icon"/>
 

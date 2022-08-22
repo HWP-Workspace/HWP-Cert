@@ -53,9 +53,9 @@ if(!empty($_GET['id'])){
 
 						<ul class="nav nav-primary">
 								<li class="nav-item active">
-									<a href="index.php">
+									<a href="index.php<?= (!empty($_GET['p']) ? "?p=".$_GET['p'] : "" ) ?>">
                   <i class="fas fa-arrow-left"></i>
-										<p>กลับไปหน้าแรก</p>
+										<p>ย้อนกลับ</p>
 									</a>
 								</li>
 							

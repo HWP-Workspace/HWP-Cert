@@ -280,7 +280,7 @@ if(isset($_GET["s"])){
                                 <small class="card-text d-block" style="opacity: 0.6;"><i class="text-primary pr-1 far fa-calendar-minus"></i><?=DateThai($row["date"])?></small>
                                 
                                 <div class="text-center mt-1">
-                                <button onclick="UserRow(<?=$row['id']?>)" class="btn btn-sm btn-primary "><i class="fas fa-user"></i> รายชื่อ</button>
+                                <a href="download.php?id=<?=$row['id']?><?= (!empty($_GET['p']) ? "&p=".$_GET['p'] : "" ) ?>"><button class="btn btn-sm btn-primary "><i class="fas fa-user mr-1"></i>รายชื่อ</button></a>
                                 </div>
                             </div>
                             </div>
@@ -432,13 +432,6 @@ if(isset($_GET["s"])){
 
 </body>
 </html>
-
-<!-- Script Link Show User-->  
-<script>
-function UserRow(id){
-    window.location.href='download.php?id=' + id;
-      }
-</script>
 
 <?php if(isset($_SESSION['msg_a'])){ ?>
     <script>	
