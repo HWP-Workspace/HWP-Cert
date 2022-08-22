@@ -1,9 +1,5 @@
 <?php
 require('connect.php');
-if(isset($_SESSION['username'])){
-	header('location: admin.php');
-}
-
 //เงื่อนไข pj
 if(!empty($_GET['id'])){
     $idpj = mysqli_real_escape_string($con, $_GET['id']);

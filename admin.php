@@ -29,12 +29,11 @@ if(!isset($_SESSION['username'])){
 						<div class="sidebar-content">
 
 							<ul class="nav nav-secondary">
-								<li class="nav-item active">
-									<a href="">
+								<li class="nav-item">
+									<a href="index.php">
 										<i class="fas fa-home"></i>
 										<p>หน้าแรก</p>
 									</a>
-
 								</li>
 								<li class="nav-section">
 									<span class="sidebar-mini-icon">
@@ -42,7 +41,12 @@ if(!isset($_SESSION['username'])){
 									</span>
 									<h4 class="text-section">แถบเมนู</h4>
 								</li>
-                
+                <li class="nav-item active">
+									<a href="admin.php">
+										<i class="fas fa-trophy"></i>
+										<p>โครงการ/กิจกรรม</p>
+									</a>
+								</li>
                 <?php if($_SESSION['username'] == "admin"){ ?>
                 <li class="nav-item">
 									<a data-toggle="collapse" href="#base">

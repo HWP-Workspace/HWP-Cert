@@ -27,7 +27,7 @@ require('structure/head.php');
 
                         <ul class="nav nav-secondary">
 								<li class="nav-item">
-									<a href="admin.php">
+									<a href="index.php">
 										<i class="fas fa-home"></i>
 										<p>หน้าแรก</p>
 									</a>
@@ -39,7 +39,12 @@ require('structure/head.php');
 									</span>
 									<h4 class="text-section">แถบเมนู</h4>
 								</li>
-
+								<li class="nav-item">
+									<a href="admin.php">
+										<i class="fas fa-trophy"></i>
+										<p>โครงการ/กิจกรรม</p>
+									</a>
+								</li>
 								<?php if($_SESSION['username'] == "admin"){ ?>
                                  <li class="nav-item">
 									<a data-toggle="collapse" href="#base">

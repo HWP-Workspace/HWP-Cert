@@ -1,8 +1,7 @@
 <?php
+session_start();
 require('connect.php');
-if(isset($_SESSION['username'])){
-	header('location: admin.php');
-}
+
 //รับชื่อโครงการ
 if(!empty($_GET['id'])){
   $idpj = mysqli_real_escape_string($con, $_GET['id']);
@@ -58,21 +57,73 @@ if(!empty($_GET['id'])){
                   <i class="fas fa-arrow-left"></i>
 										<p>กลับไปหน้าแรก</p>
 									</a>
+								</li>
+							
+                <?php if(isset($_SESSION['username'])) { ?>
+                                    
+                    <ul class="nav nav-secondary">
+                    <li class="nav-section">
+                      <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                      </span>
+                      <h4 class="text-section">แถบเมนู</h4>
+                    </li>
+                      <li class="nav-item">
+                      <a href="admin.php">
+                        <i class="fas fa-trophy"></i>
+                        <p>โครงการ/กิจกรรม</p>
+                      </a>
+                    </li>
+                    <?php if($_SESSION['username'] == "admin"){ ?>
+                      <li class="nav-item">
+                      <a data-toggle="collapse" href="#base">
+                      <i class="fas fa-cog"></i>
+                        <p>ตั้งค่าระบบ</p>
+                        <span class="caret"></span>
+                      </a>
+                      <div class="collapse" id="base">
+                        <ul class="nav nav-collapse">
+                          <li>
+                            <a href="admin_config.php">
+                              <span class="sub-item">ตั้งค่าทั่วไป</span>
+                            </a>
+                          </li>
+    
+                          <li>
+                            <a href="admin_user.php">
+                              <span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+                            </a>
+                          </li>
+    
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
 
-								</li>
-								<li class="nav-section">
-									<span class="sidebar-mini-icon">
-										<i class="fa fa-ellipsis-h"></i>
-									</span>
-									<h4 class="text-section">แถบเมนู</h4>
-								</li>
-
-								<li class="nav-item">
-									<a data-toggle="modal" data-target="#login" >
-										<i class="fas fa-lock"></i>
-										<p>ล็อกอิน</p>
-									</a>
-								</li>
+                    <?php } ?>
+                   <li class="nav-item">
+                      <a href="admin_tempate.php" >
+                        <i class="fas fa-file"></i>
+                        <p>เทมเพลต</p>
+                      </a>
+                    </li>
+    
+                  <?php } else{ ?>
+    
+                    <li class="nav-section">
+                      <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                      </span>
+                      <h4 class="text-section">แถบเมนู</h4>
+                    </li>
+    
+                    <li class="nav-item">
+                      <a data-toggle="modal" data-target="#login" >
+                        <i class="fas fa-lock"></i>
+                        <p>ล็อกอิน</p>
+                      </a>
+                    </li>
+                  <?php } ?>
 
 							</ul>
 						</div>

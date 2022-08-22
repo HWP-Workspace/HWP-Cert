@@ -33,7 +33,7 @@ if($_SESSION['username'] !== "admin"){
 
 							<ul class="nav nav-secondary">
 								<li class="nav-item">
-									<a href="admin.php">
+									<a href="index.php">
 										<i class="fas fa-home"></i>
 										<p>หน้าแรก</p>
 									</a>
@@ -46,6 +46,12 @@ if($_SESSION['username'] !== "admin"){
 									<h4 class="text-section">แถบเมนู</h4>
 								</li>
 
+								<li class="nav-item">
+									<a href="admin.php">
+										<i class="fas fa-trophy"></i>
+										<p>โครงการ/กิจกรรม</p>
+									</a>
+								</li>
 
                                   <li class="nav-item active">
 									<a data-toggle="collapse" href="#base">
