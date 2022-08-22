@@ -486,11 +486,11 @@ if($namepj_data == '' || $namepj_data == null){ // เช็คค่าว่�
             </button>
         </div>
         <div class="modal-body">
-              <form action="excel/import.php" method="post" enctype="multipart/form-data">
+              <form action="excel/import.php" id="import" name="import" method="post" enctype="multipart/form-data">
 
 			  <div class="mb-3">
-                    <label class="form-label" for="name">กรุณาอัปโหลดไฟล์ .csv (UTF-8) หรือ .xlsx เท่านั้น</label>
-                    <div class="input-group mb-3">
+          <label class="form-label" for="name">กรุณาอัปโหลดไฟล์ .csv (UTF-8) หรือ .xlsx เท่านั้น</label>
+          <div class="input-group mb-3 mt-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text">อัปโหลด</span>
 					</div>
@@ -530,10 +530,10 @@ if($namepj_data == '' || $namepj_data == null){ // เช็คค่าว่�
           </div>
           <div class="modal-body">
 
-        <form action="sql/admin/uptempate.php" method="post" enctype="multipart/form-data">
+        <form action="sql/admin/uptempate.php" id="uptempate" name="uptempate" method="post" enctype="multipart/form-data">
 				<div class="mb-3">
-          <label class="form-label" for="name">กรุณาอัปโหลดไฟล์เทมเพลต .jpg, .jpeg, .png เท่านั้น</label>
-          <div class="input-group mb-3">
+          <label class="form-label mb-1" for="name">กรุณาอัปโหลดไฟล์เทมเพลต .jpg, .jpeg, .png เท่านั้น <text class="text-danger">(ไม่เกิน 2 MB)</text></label>
+          <div class="input-group mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text">อัปโหลด</span>
 					</div>
@@ -541,13 +541,14 @@ if($namepj_data == '' || $namepj_data == null){ // เช็คค่าว่�
 
 					<div class="custom-file">
 					<input type="file" accept=".jpg, .png, .jpeg" class="custom-file-input" name="upload" id="upload" required>
-					<label class="custom-file-label" for="file">Choose file</label>
+					<label class="custom-file-label" for="file"></label>
 					</div>
-                </div>
+          </div>
+          <small class="text-primary">ขนาด A4 แนวนอน (21*29.7 cm) เท่านั้น</small>
                   
                   <?php 
                   if(!empty($img_data)){
-                   echo  "<label class=\"form-label\" for=\"name\"> <div class=\"mb-2\">รูปแบบ : </div>  <img class=\"img-cert\" src=\"upload/tempate/$img_data\"></label>" ;
+                   echo  "<label class=\"form-label\" for=\"name\"> <div class=\"mb-2 mt-3\">รูปแบบ : </div>  <img class=\"img-cert\" src=\"structure/viewimg.php?name=$img_data&path=cer\"></label>" ;
                   }   
                   ?>
 
@@ -709,13 +710,6 @@ function SettingPj(id){
 
 <?php }; ?>
 
-<script>
-$(".custom-file-input").on("change", function() {
-var fileName = $(this).val().split("\\").pop();
- $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-});
-</script>
-
 
 <!-- Script DataTable - EditLearn Button -->
 <script>
@@ -871,5 +865,78 @@ function setBubble(range, bubble) {
   bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
 }
 
-})
+});
+</script>
+
+<!-- Lock Type/Size Upload - Tempate-->
+<script>
+  $("#upload").change(function () {
+	var extall="jpg,jpeg,png";
+	file = document.uptempate.upload.value;
+	ext = file.split('.').pop().toLowerCase();
+	if(parseInt(extall.indexOf(ext)) < 0){	
+    swal("พบข้อผิดพลาด!", "กรุณาอัปโหลดไฟล์ jpg, jpeg, png เท่านั้น", {
+    icon : "warning",
+    buttons: {
+      confirm: {
+        text: "ตกลง",
+        className : 'btn btn-warning'}
+    }
+    });
+		$("#upload").val('');
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+	}
+   	var maxsize_byte = 2097152;
+   	var fld = document.getElementById('upload');
+	if( fld.files && fld.files.length == 1 && fld.files[0].size > maxsize_byte ){
+    swal("พบข้อผิดพลาด!", "กรุณาอัปโหลดไฟล์ไม่เกิน 2 MB", {
+    icon : "warning",
+    buttons: {
+      confirm: {
+        text: "ตกลง",
+        className : 'btn btn-warning'}
+    }
+    });
+		$("#upload").val('');
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+   	}
+
+}); 
+</script>
+
+<!-- Lock Type/Size Upload - Excel-->
+<script>
+  $("#file").change(function () {
+	var extall="csv,xlxs";
+	file = document.import.file.value;
+	ext = file.split('.').pop().toLowerCase();
+	if(parseInt(extall.indexOf(ext)) < 0){	
+    swal("พบข้อผิดพลาด!", "กรุณาอัปโหลดไฟล์ xlxs, csv เท่านั้น", {
+    icon : "warning",
+    buttons: {
+      confirm: {
+        text: "ตกลง",
+        className : 'btn btn-warning'}
+    }
+    });
+		$("#file").val('');
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+	}
+
+}); 
+</script>
+
+
+
+
+
+
+<script>
+$(".custom-file-input").on("change", function() {
+var fileName = $(this).val().split("\\").pop();
+ $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
 </script>

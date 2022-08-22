@@ -176,11 +176,11 @@ if(isset($_GET["s"])){
                     
 
                         <div class="col-xl-1 col-6 mt-2 mt-xl-0">
-                        <button type="submit" value="search" class="btn btn-block btn-primary">ค้นหา</button>
+                        <button type="submit" value="search" class="btn btn-block btn-primary"><i class="fas fa-search"></i></button>
                         </div>
 
                         <div class="col-xl-1 col-6 mt-2 mt-xl-0">
-                        <a href="index.php"><button type="button" class="btn btn-block btn-warning">ล้างค่า</button></a>
+                        <a href="index.php"><button type="button" class="btn btn-block btn-warning"><i class="fas fa-times"></i></button></a>
                         </div>
 
                     </div>
@@ -255,7 +255,7 @@ if(isset($_GET["s"])){
                 if($num_rows != 0){ 
                 while($row = mysqli_fetch_array($result)){ 
                     if($row["preview"] != ''){
-                        $image = ''.$url.'/upload/preview/' .$row["preview"].'';
+                        $image = 'upload/preview/'.$row["preview"];
                         $imageData = base64_encode(file_get_contents($image));
                         $src = 'data: ' . ';base64,' . $imageData;
                     ?> 
