@@ -1,82 +1,161 @@
-<?php 
-    session_start();
-?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<!--- Head --->
-<?php require('structure/head.php'); ?>
+<!-- Head -->
+<?php 
+session_start();
+require('structure/head.php'); 
+
+if(isset($_SESSION['username'])){
+	header('location: admin.php');
+}
+
+?>
 
 </head>
 <body>
 
-<!--- Nav --->
+<!-- Nav -->
 <?php require('structure/nav.php'); ?>
 
 
-  <!--- Card Content --->
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2">			
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+						<div class="sidebar-content">
 
-<div class="container">
+							<ul class="nav nav-secondary">
+								<li class="nav-item active">
+									<a href="">
+										<i class="fas fa-home"></i>
+										<p>หน้าแรก</p>
+									</a>
 
-  <div class="text-center pt-5">
-    <img src="img/fav.ico" alt="" width="150" height="150">
-    <div class="text-center pt-3 pb-3">
-      <h4 class="school-name"> ระบบพิมพ์เกียรติบัตรออนไลน์</h4>
-      <p class="school-name"> <?php echo $nameschool_data ?> </p>
-    </div>
-  </div>
+								</li>
+								<li class="nav-section">
+									<span class="sidebar-mini-icon">
+										<i class="fa fa-ellipsis-h"></i>
+									</span>
+									<h4 class="text-section">แถบเมนู</h4>
+								</li>
+
+								<li class="nav-item">
+									<a data-toggle="modal" data-target="#login" >
+										<i class="fas fa-lock"></i>
+										<p>ล็อกอิน</p>
+									</a>
+								</li>
+                                
+
+							</ul>
+						</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="panel-header bg-secondary-gradient">
+					<div class="page-inner py-5">
+						<div class="text-center">
+
+							<div>
+							<img class="d-inline mb-3" src="img/fav.ico" width="100" height="100">
+							</div>
+
+							<div>
+
+								<h2 class="d-block text-white mb-1 fw-bold">ระบบพิมพ์เกียรติบัตรออนไลน์</h2>
+								<h5 class="d-inline text-white op-7 mb-2"><?= $nameschool_data ?></h5>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="page-inner mt--5">
+
+					<div class="card">
+						<h2 class="card-header"> <b>ตารางแสดงโครงการ/กิจกรรม</b></h2>
+						<div class="card-body">
+
+							<table id="loadproject" class="table nowrap" style="width:100%">
+									<thead class="table-light">
+										<tr>
+											<th>ลำดับที่</th>
+											<th>โครงการ</th>
+											<th>กลุ่ม/งาน</th>
+											<th>วันที่</th>
+											<th>เกียรติบัตร</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+										</tr>
+									</tbody>
+							</table>
 
 
 
-  <div class="card mt-4 mb-4 shadow-sm" >
-    <div class="card-header text-white" id= "card-content">
-      <h5 class="pt-1"><i class="fas fa-table pe-2"></i>ตารางแสดงโครงการ/กิจกรรม</h5>
-    </div>
-      <div class="card-body">
-        <table id="loadproject" class="table table-bordered nowrap" style="width:100%">
-                  <thead class="table-light">
-                      <tr>
-                          <th>ลำดับที่</th>
-                          <th>โครงการ</th>
-                          <th>กลุ่ม/งาน</th>
-                          <th>วันที่</th>
-                          <th>เกียรติบัตร</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                      </tr>
-                  </tbody>
-        </table>
-    </div>
-  </div>
-  
-</div>  
+						</div>
+					
+					</div>
 
-    <!--- Footer --->
-    <?php require('structure/footer.php'); ?>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>	
+			</div>
+
+
+			<!-- Footer-->
+			<?php require('structure/footer.php'); ?>
+
+
+
+		</div>
+		
+	</div>
+
+<!-- Script-->
+<?php require('structure/script.php'); ?>
+
+</body>
+</html>
 
 
 <!-- Modal Login -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="login" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4> ล็อกอินเข้าสู่ผู้ดูแลระบบ</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3> ล็อกอินเข้าสู่ผู้ดูแลระบบ</h3>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
       </div>
 
       <div class="modal-body">
       
-            <form action="checklogin.php" method="post">
+            <form action="sql/index/checklogin.php" method="post">
               <div class="mb-3">
                   <label class="form-label" for="username">ผู้ใช้</label>
                   <input class="form-control" type="text" name="username"  placeholder="ชื่อผู้ใช้" required>
@@ -86,7 +165,7 @@
                   <input class="form-control" type="password" name="password" placeholder="รหัสผ่าน" required>
               </div>
               <div class="text-center">
-                  <button class="btn btn-primary" type="submit" name="login_user" >เข้าสู่ระบบ</button>
+                  <button class="btn btn-primary" type="submit" name="submit" id="submit" >เข้าสู่ระบบ</button>
               </div> 
           </form>
       </div>
@@ -96,18 +175,14 @@
   </div>
 </div>
 
-<!-- Script -->
-<?php require('structure/script.php'); ?>
-
-
 <!-- Script DataTable-->  
-<script>
+<script >
 $(document).ready(function() {
   
   var table = $('#loadproject').DataTable( {
-        "processing": true,
+        //"processing": true,
         "serverSide": true,
-        "ajax": "loadproject.php",
+        "ajax": "sql/index/loadproject.php",
         "language" : {
               "emptyTable": "ไม่มีข้อมูลในตาราง",
               "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
@@ -144,7 +219,7 @@ $(document).ready(function() {
                   "copyKeys": "กดปุ่ม Ctrl หรือ Command + C เพื่อคัดลอกข้อมูลบนตารางไปยัง Clipboard ที่เครื่องของคุณ"
               }
           },
-        "order": [[ 0, "asc" ]],
+        "order": [[ 0, "desc" ]],
         "columns": [
         { "width": "7%" },
         { "width": "40%" },
@@ -153,17 +228,16 @@ $(document).ready(function() {
         { "width": "5%" }
          ],
 
-        "order": [[ 0, 'desc' ]],
          responsive: true
     } );
     
-    new $.fn.dataTable.FixedHeader( table );
 
-    table.on( 'order.dt search.dt', function () {
-        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-    } ).draw();
+    table.on('draw.dt', function () {
+    var info = table.page.info();
+    table.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1 + info.start;
+    });
+    });
 } );
 </script>
 
@@ -175,5 +249,19 @@ function UserRow(id){
 
 </script>
 
-</body>
-</html>
+<?php if(isset($_SESSION['msg_a'])){ ?>
+    <script>	
+        swal("พบข้อผิดพลาด!", "<?=$_SESSION['msg_a']?>", {
+            icon : "error",
+            buttons: {
+                confirm: {
+                    text: "ตกลง",
+                    className : 'btn btn-danger'
+                }
+            },
+            }).then(function() {
+            <?php unset($_SESSION['msg_a']) ?>
+           /* location.reload();*/
+        });
+    </script>
+    <?php }; ?>

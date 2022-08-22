@@ -7,6 +7,22 @@ $result_shortnameschool = mysqli_query($con,$sql_shortnameschool);
                break;
 }
 
+//รับชื่อกลุ่มสาระ
+$sql_ckdp = "SELECT `dp` FROM `project` WHERE id = '$id'";
+$result_ckdp = mysqli_query($con,$sql_ckdp); 
+    while ($row_ckdp = mysqli_fetch_assoc($result_ckdp)) {
+               $ckdp_data = $row_ckdp['dp'];
+               break;
+}
+
+//รับรหัสย่อกลุ่มสาระ
+$sql_cksdp = "SELECT `shortdp` FROM `admin` WHERE dp = '$ckdp_data'";
+$result_cksdp = mysqli_query($con,$sql_cksdp); 
+    while ($row_cksdp = mysqli_fetch_assoc($result_cksdp)) {
+               $cksdp_data = $row_cksdp['shortdp'];
+               break;
+}
+
 // วันที่โปรเจค
 $sql_year = "SELECT `date` FROM `project` WHERE `id`=".$id ;
 $result_year = mysqli_query($con, $sql_year) ;
@@ -23,7 +39,7 @@ $records_cer = (int)$res[0];
 $int_cer = (int)$records_cer;
 
 // รวมเลข Cer
-$idcer = $shortnameschool_data.".".$yearthai.".".$id."/".$int_cer;
+$idcer = $shortnameschool_data.".".$cksdp_data.".".$yearthai.".".$id."/".$int_cer;
 
 //เช็คมีซ้ำไหมก่อน
 $cer_check_query = "SELECT * FROM `user` WHERE `idcer` = '$idcer' LIMIT 1";

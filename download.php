@@ -1,9 +1,10 @@
-<?php 
-    session_start();
-    require('connect.php');
-
-  //รับชื่อโครงการ
-if(isset($_GET['id'])){
+<?php
+require('connect.php');
+if(isset($_SESSION['username'])){
+	header('location: admin.php');
+}
+//รับชื่อโครงการ
+if(!empty($_GET['id'])){
   $idpj = mysqli_real_escape_string($con, $_GET['id']);
   $sql_namepj = "SELECT `name` FROM `project` WHERE `id` = '$idpj' ";
   $result_namepj = mysqli_query($con,$sql_namepj); 
@@ -12,67 +13,172 @@ if(isset($_GET['id'])){
     die(mysqli_error($con));
   }
 
-  while ($row_name = mysqli_fetch_assoc($result_namepj)) {
-      $namepj_data = $row_name['name'];
-      break;
-        }
+  $num_pj = mysqli_num_rows($result_namepj); 
+
+  if($num_pj == 0){
+	header("location:index.php");
   }
+
+	while ($row_name = mysqli_fetch_assoc($result_namepj)) {
+		$namepj_data = $row_name['name'];
+		break;
+			}
+
+  }
+  else{
+	header("location:index.php");
+  }
+
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<!--- Head --->
+<!-- Head -->
 <?php require('structure/head.php'); ?>
+
 </head>
 <body>
 
-<!--- Nav --->
+<!-- Nav -->
 <?php require('structure/nav.php'); ?>
 
 
-<!--- Card Content --->
-<div class="container">
-  <div class="card mt-4 shadow-sm" >
-    <div class="card-header text-white" id= "card-content">
-      <h6 class="pt-1"><i class="fas fa-table pe-2"></i>รายชื่อผู้เข้าร่วมกิจกรรม/โครงการ : <?php echo $namepj_data ?> </h6>
-    </div>
-      <div class="card-body">
-        <table id="user" class="table table-bordered nowrap" style="width:100%">
-          <thead class="table-light">
-              <tr>
-                  <th>ลำดับที่</th>
-                  <th>ชื่อ-นามสกุล</th>
-                  <th>เลขที่เกียรติบัตร</th>
-                  <th>ดาวน์โหลด</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-              </tr>
-          </tbody>
-      </table>
-      </div>
-    </div>
-  </div>
-</div>
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2">			
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+						<div class="sidebar-content">
+
+						<ul class="nav nav-secondary">
+								<li class="nav-item active">
+									<a href="index.php">
+                  <i class="fas fa-arrow-left"></i>
+										<p>กลับไปหน้าแรก</p>
+									</a>
+
+								</li>
+								<li class="nav-section">
+									<span class="sidebar-mini-icon">
+										<i class="fa fa-ellipsis-h"></i>
+									</span>
+									<h4 class="text-section">แถบเมนู</h4>
+								</li>
+
+								<li class="nav-item">
+									<a data-toggle="modal" data-target="#login" >
+										<i class="fas fa-lock"></i>
+										<p>ล็อกอิน</p>
+									</a>
+								</li>
+
+							</ul>
+						</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="panel-header bg-secondary-gradient">
+					<div class="page-inner py-5">
+						<div class="text-center">
+
+							<div>
+							<img class="d-inline mb-3" src="img/fav.ico" width="100" height="100">
+							</div>
+
+							<div>
+
+								<h2 class="d-block text-white mb-1 fw-bold">ระบบพิมพ์เกียรติบัตรออนไลน์</h2>
+								<h5 class="d-inline text-white op-7 mb-2"><?= $nameschool_data ?></h5>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="page-inner mt--5">
+
+					<div class="card">
+						<h3 class="card-header"><b><?php echo $namepj_data ?> </b></h3>
+						<div class="card-body">
+
+
+                        <table id="user" class="table nowrap" style="width:100%">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ลำดับที่</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>เลขที่เกียรติบัตร</th>
+                                <th>ดาวน์โหลด</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+						</div>
+					
+					</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>	
+			</div>
+
+
+			<!-- Footer-->
+			<?php require('structure/footer.php'); ?>
+
+
+
+		</div>
+		
+	</div>
+
+<!-- Script-->
+<?php require('structure/script.php'); ?>
+
+</body>
+</html>
 
 <!-- Modal Login -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="login" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <div id="exampleModalLabel"> ล็อกอินเข้าสู่ผู้ดูแลระบบ</div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3> ล็อกอินเข้าสู่ผู้ดูแลระบบ</h3>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
       </div>
-      <div class="modal-body">
 
-            <form action="checklogin.php" method="post">
+      <div class="modal-body">
+      
+            <form action="sql/index/checklogin.php" method="post">
               <div class="mb-3">
                   <label class="form-label" for="username">ผู้ใช้</label>
                   <input class="form-control" type="text" name="username"  placeholder="ชื่อผู้ใช้" required>
@@ -82,29 +188,23 @@ if(isset($_GET['id'])){
                   <input class="form-control" type="password" name="password" placeholder="รหัสผ่าน" required>
               </div>
               <div class="text-center">
-                  <button class="btn btn-primary" type="submit" name="login_user" class="btn">เข้าสู่ระบบ</button>
+                  <button class="btn btn-primary" type="submit" name="login_user" >เข้าสู่ระบบ</button>
               </div> 
           </form>
-          </div>
+      </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<!--- Footer --->
-<?php require('structure/footer.php'); ?>
-
-
-<!-- Script -->
-<?php require('structure/script.php'); ?>
-
 <!-- Script DataTable - User -->
 <script>
 $(document).ready(function() {
     var table = $('#user').DataTable( {
-        "processing": true,
+        //"processing": true,
         "serverSide": true,
-        "ajax": "loaduser.php?id=<?php echo (isset($_GET['id']) ? $_GET['id'] : ''); ?>",
+        "ajax": "sql/download/loaduser.php?id=<?php echo (isset($_GET['id']) ? $_GET['id'] : ''); ?>",
         "language" : {
               "emptyTable": "ไม่มีข้อมูลในตาราง",
               "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
@@ -147,16 +247,16 @@ $(document).ready(function() {
         { "width": "40%" },
         { "width": "10%" }
          ],
-         "order": [[ 1, 'desc' ]],
+         "order": [[ 1, 'asc' ]],
          responsive: true
     } );
-    new $.fn.dataTable.FixedHeader( table );
-
-    table.on( 'order.dt search.dt', function () {
-        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-    } ).draw();
+    
+    table.on('draw.dt', function () {
+    var info = table.page.info();
+    table.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1 + info.start;
+    });
+    });
 
 } );
 </script>
@@ -165,10 +265,7 @@ $(document).ready(function() {
 <script>
 function PrintCer(id) {
   var idpj = <?= $idpj ?> ;      
-  window.location.href='print_cer.php?id=' + idpj  +'&'+ 'learn=' + id;        
+  window.open('print.php?id=' + idpj  +'&'+ 'learn=' + id, '_blank')
+
 }
 </script>
-
-
-</body>
-</html>

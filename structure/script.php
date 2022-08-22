@@ -1,14 +1,48 @@
-<!-- Bootstrap 5-->   
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" 
-integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script> 
+	<!--   Core JS Files -->
+	<script src="assets/js/core/jquery.3.2.1.min.js"></script>
+	<script src="assets/js/core/popper.min.js"></script>
+	<script src="assets/js/core/bootstrap.min.js"></script>
+
+	<!-- jQuery UI -->
+	<script src="assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+
+	<!-- jQuery Scrollbar -->
+	<script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
 
-<!-- DataTable-->  
-<script type="text/javascript"  src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript"  src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript"  src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script> 
-<!-- DataTable Responsive-->  
-<script type="text/javascript"  src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script> 
-<script type="text/javascript"  src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script> 
-<script type="text/javascript"  src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap.min.js"></script> 
+	<!-- Chart JS -->
+	<script src="assets/js/plugin/chart.js/chart.min.js"></script>
 
+	<!-- jQuery Sparkline -->
+	<script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+	<!-- Chart Circle -->
+	<script src="assets/js/plugin/chart-circle/circles.min.js"></script>
+
+	<!-- Datatables -->
+	<script src="assets/js/plugin/datatables/datatables.min.js"></script>
+
+	<!-- Bootstrap Notify -->
+	<script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+	<!-- jQuery Vector Maps -->
+	<script src="assets/js/plugin/jqvmap/jquery.vmap.min.js"></script>
+	<script src="assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
+
+	<!-- Sweet Alert -->
+	<script src="assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+	<!-- Atlantis JS -->
+	<script src="assets/js/atlantis.min.js"></script>
+
+	<!-- DataTable-->  
+	<script type="text/javascript"  src="js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript"  src="js/dataTables.bootstrap4.min.js"></script> 
+	<!-- DataTable Responsive-->  
+	<script type="text/javascript"  src="js/dataTables.responsive.min.js"></script> 
+	<script type="text/javascript"  src="js/responsive.bootstrap4.min.js"></script> 
+
+
+
+	

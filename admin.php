@@ -1,97 +1,252 @@
-<?php 
-session_start();
-// เช็คล็อกอิน ถ้าหากไม่มี ให้กลับไปหน้า index.php
-if (!isset($_SESSION['username'])) {
-   header('location: index.php');
-    }
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<!--- Head --->
-<?php require('structure/head.php'); ?>
+<!-- Head -->
+<?php 
+session_start();
+require('connect.php');
+require('structure/head.php'); 
+
+if(!isset($_SESSION['username'])){
+	header('location: index.php');
+}
+
+?>
 
 </head>
 <body>
 
-<!--- nav --->
+
+<!-- Nav -->
 <?php require('structure/nav.php'); ?>
 
-<!--- Card Content --->
-<div class="container pt-4 d-block">
-  <div class="card-deck mb-1">
-    <!--- Card Content - Sub --->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header text-white" id= "card-content-admin" > <h5 class="mt-2"> <i class="fas fa-user-shield"></i> สำหรับเจ้าหน้าที่</h5></div>
-      <div class="card-body">
-        <div class="card-header">
-          <div class="float-end text-white">
-            <button class="btn btn-sm bg-primary text-white" data-bs-toggle="modal" data-bs-target="#AddPj" >  <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
-        </div>
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" href="admin.php" >โครงการ/กิจกรรม</a>
-            </li>
-          <?php  if ($_SESSION['username'] == "admin"){
-            echo '
-            
-            <li class="nav-item">
-            <a class="nav-link "  id = "nav-admin-custom" href="admin_user.php" >บัญชีผู้ใช้</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id = "nav-admin-custom" href="admin_setting.php">ตั้งค่าระบบ</a>
-          </li>
-            
-            ';
-          }
-            ?>
-            <li class="nav-item">
-              <a class="nav-link "  id = "nav-admin-custom" href="admin_tempate.php" >เทมเพลต</a> 
-            </li>
-          </ul>
-        </div>
-      </div> 
 
-        <div class="card-body">
-            <table id="adminloadproject" class="table table-bordered nowrap" style="width:100%">
-                    <thead class="table-light">
-                        <tr>
-                            <th>เลขที่</th>
-                            <th>โครงการ/กิจกรรม</th>
-                            <th>กลุ่ม/งาน</th>
-                            <th>วันที่</th>
-                            <th>ดำเนินการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td> </td>
-                          <td> </td>
-                          <td> </td>
-                          <td> </td>
-                          <td> </td>
-                        </tr>
-                    </tbody>
-                </table>
-          </div>
-    </div>
-  </div>
-  </div>
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2">			
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+						<div class="sidebar-content">
+
+							<ul class="nav nav-secondary">
+								<li class="nav-item active">
+									<a href="">
+										<i class="fas fa-home"></i>
+										<p>หน้าแรก</p>
+									</a>
+
+								</li>
+								<li class="nav-section">
+									<span class="sidebar-mini-icon">
+										<i class="fa fa-ellipsis-h"></i>
+									</span>
+									<h4 class="text-section">แถบเมนู</h4>
+								</li>
+                
+                <?php if($_SESSION['username'] == "admin"){ ?>
+                <li class="nav-item">
+									<a data-toggle="collapse" href="#base">
+									<i class="fas fa-cog"></i>
+										<p>ตั้งค่าระบบ</p>
+										<span class="caret"></span>
+									</a>
+									<div class="collapse" id="base">
+										<ul class="nav nav-collapse">
+											<li>
+												<a href="admin_config.php">
+													<span class="sub-item">ตั้งค่าทั่วไป</span>
+												</a>
+											</li>
+
+											<li>
+												<a href="admin_user.php">
+													<span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+												</a>
+											</li>
+
+											</li>
+										</ul>
+									</div>
+								</li>
+                <?php } ?>
+
+                <li class="nav-item">
+									<a href="admin_tempate.php" >
+										<i class="fas fa-file"></i>
+										<p>เทมเพลต</p>
+									</a>
+								</li>
+
+							</ul>
+
+
+
+						</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="panel-header bg-secondary-gradient">
+					<div class="page-inner py-5">
+						<div class="text-center">
+
+							<div>
+							<img class="d-inline mb-3" src="img/fav.ico" width="100" height="100">
+							</div>
+
+							<div>
+								<h2 class="d-block text-white mb-1 fw-bold">ระบบพิมพ์เกียรติบัตรออนไลน์</h2>
+								<h5 class="d-inline text-white op-7 mb-2"><?= $nameschool_data ?></h5>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="page-inner mt--5">
+          
+        <!-- Card -->
+        <div class="row">
+            <div class="col-sm-6 col-md-4 d-none d-xl-block">
+                <div class="card card-stats card-secondary card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                            <div class="icon-big text-center">
+                                <i class="flaticon-settings"></i>
+                            </div>
+                            </div>
+                            <div class="col-7 col-stats">
+                            <div class="numbers">
+                                <p class="card-category">โครงการ</p>
+                                <h4 class="card-title" id="all_project"></h4>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 d-none d-xl-block">
+                <div class="card card-stats card-secondary card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                            <div class="icon-big text-center">
+                                <i class="flaticon-users"></i>
+                            </div>
+                            </div>
+                            <div class="col-7 col-stats">
+                            <div class="numbers">
+                                <p class="card-category">เกียรติบัตร</p>
+                                <h4 class="card-title" id="all_user"></h4>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 d-none d-xl-block">
+                <div class="card card-stats card-secondary card-round">
+                    <div class="card-body ">
+                        <div class="row">
+                            <div class="col-5">
+                            <div class="icon-big text-center">
+                                <i class="flaticon-success"></i>
+                            </div>
+                            </div>
+                            <div class="col-7 col-stats">
+                            <div class="numbers">
+                                <p class="card-category">ผู้ดแลระบบ</p>
+                                <h4 class="card-title" id="all_admin"></h4>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+
+					<div class="card">
+						<h2 class="card-header"> <b>ตั้งค่าโครงการ/กิจกรรม</b>
+                        <div class="float-right text-white">
+                        <button class="btn btn-sm bg-primary text-white" data-toggle="modal" data-target="#AddPj" >  <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
+                         </div>
+                         </h2>
+						<div class="card-body">
+              
+							<table id="loadproject" class="table nowrap" style="width:100%">
+									<thead class="table-light">
+										<tr>
+											<th>ลำดับที่</th>
+											<th>โครงการ</th>
+											<th>กลุ่ม/งาน</th>
+											<th>วันที่</th>
+											<th>ดำเนินการ</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+										</tr>
+									</tbody>
+							</table>
+
+
+
+						</div>
+					
+					</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>	
+			</div>
+
+
+			<!-- Footer-->
+			<?php require('structure/footer.php'); ?>
+
+
+
+		</div>
+		
+	</div>
+
+<!-- Script-->
+<?php require('structure/script.php'); ?>
+
 
   <!-- Modal Add Project -->
   <div class="modal fade" id="AddPj" tabindex="-1">
     <div class="modal-dialog ">
       <div class="modal-content ">
         <div class="modal-header">
-          <h5> เพิ่มโครงการ/กิจกรรม </h5> 
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3> เพิ่มโครงการ/กิจกรรม </h3> 
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
 
-              <form action="admincreateproject.php" method="post">
+              <form action="sql/admin/createproject.php" method="post">
                 <div class="mb-3">
                     <label class="form-label" for="name">ชื่อโครงการ/กิจกรรม</label>
                     <input class="form-control" type="text" name="name"  placeholder="โครงการ/กิจกรรม" required>
@@ -100,12 +255,12 @@ if (!isset($_SESSION['username'])) {
                 <div class="mb-3">
                     <label class="form-label" for="date">วันที่</label>
                     <input class="form-control" type="date" name="date" required>
-                    <div class="form-text">กรุณากรอกเป็น ค.ศ. ระบบจะแปลงเป็น พ.ศ. ให้อัตโนมัติ</div>
+                    <small>กรุณากรอกเป็น ค.ศ. ระบบจะแปลงเป็น พ.ศ. ให้อัตโนมัติ</small>
                 </div>
 
                 <div class="mb-3">
                   <label for="type" class="form-label">รูปแบบ</label>
-                    <select class="form-select" name="type">
+                    <select class="form-control" name="type">
                       <option value="0" selected>ชื่อ-นามสกุล เท่านั้น</option>
                       <option value="1">ชื่อ-นามสกุล และเพิ่มอีก 1 บรรทัด</option>
                       <option value="2">ชื่อ-นามสกุล และเพิ่มอีก 2 บรรทัด</option>
@@ -125,15 +280,50 @@ if (!isset($_SESSION['username'])) {
 </div>
 
 
+<!-- Modal Delete -->
+<div class="modal fade" id="DeletePj" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">คุณกำลังจะลบโครงการ/กิจกรรม ?</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            </button>
+      </div>
+          <div class="modal-body text-center">
+          <form>
+            <i class="mt-2 mb-2 fas fa-exclamation-circle fa-8x text-danger"></i>
+
+            <h3 class="mt-3">คุณแน่ใจไหมที่จะลบโครงการ/กิจกรรม</h3>
+            <h4 class="mt-1">ระบบจะลบผู้เข้าร่วมในโครงการ/กิจกรรมนี้ทั้งหมด</h4>
+
+          </div>
+          <div class="mb-4 mt-3 text-center"> 
+          <input type="hidden" id="id-d">
+
+            <button type="button" onclick="DeletePj()" class="btn btn-danger"><i class="far fa-trash-alt"></i> ลบ</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i> ยกเลิก</button>
+
+            </form>
+          </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
 
   <!-- Modal Edit Project-->
   <div class="modal fade" id="EditPj" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5>แก้ไขข้อมูลโครงการ/กิจกรรม</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
+              <h3 class="modal-title">แก้ไขโครงการ/กิจกรรม</h3>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
               <div class="modal-body">
                 <form>
                   <div class="mb-3">
@@ -149,7 +339,7 @@ if (!isset($_SESSION['username'])) {
 
                   <div class="mb-3">
                   <label for="type" class="form-label">รูปแบบ</label>
-                    <select class="form-select" id="type">
+                    <select class="form-control" id="type">
                       <option value="0" selected>ชื่อ-นามสกุล เท่านั้น</option>
                       <option value="1">ชื่อ-นามสกุล และเพิ่มอีก 1 บรรทัด</option>
                       <option value="2">ชื่อ-นามสกุล และเพิ่มอีก 2 บรรทัด</option>
@@ -158,7 +348,7 @@ if (!isset($_SESSION['username'])) {
 
                   <input type="hidden" id="id-e">
                   <div class="text-center">
-                <button type="sumbit" onclick="EditPj()" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
+                <button type="button" onclick="EditPj()" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
                 </form>
               </div>
     
@@ -167,54 +357,121 @@ if (!isset($_SESSION['username'])) {
           </div>
 </div>
 
-<!-- Modal Delete -->
-<div class="modal fade" id="DeletePj" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">คุณกำลังจะลบโครงการ/กิจกรรม ?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-          <div class="modal-body text-center">
-          <form>
-            <i class="mt-2 mb-2 fas fa-exclamation-circle fa-8x text-danger"></i>
 
-            <h5 class="mt-3">คุณแน่ใจไหมที่จะลบโครงการ/กิจกรรม</h5>
-            <h6 class="mt-1">ระบบจะลบผู้เข้าร่วมในโครงการ/กิจกรรมนี้ทั้งหมด</h5>
 
-          </div>
-          <div class="mb-4 mt-3 text-center"> 
-          <input type="hidden" id="id-d">
+<!-- Modal Add Project -->
+<div class="modal fade" id="AddUser" tabindex="-1">
+    <div class="modal-dialog ">
+      <div class="modal-content ">
+        <div class="modal-header">
+          <h5> เพิ่มผู้เข้าร่วมโครงการ/กิจกรรม </h5> 
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
 
-            <button type="submit" onclick="DeletePj()" class="btn btn-danger"><i class="far fa-trash-alt"></i> ลบ</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-ban"></i> ยกเลิก</button>
+              <form action="admineditpj_createuser.php" method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="name">ชื่อ-นามสกุล</label>
+                    <input class="form-control" type="text" name="name"  placeholder="ชื่อ-นามสกุล" required>
+                </div>
 
+                <?php
+                  if($type_data == 1 ){
+                   echo '<div class="mb-3">
+                      <label for="line2" class="form-label">บรรทัด 2</label>
+                      <input type="text" class="form-control" name="line2" placeholder="บรรทัด 2">
+                  </div>' ;
+                  }
+                  if($type_data == 2){
+                  echo 
+                  '<div class="mb-3">
+                      <label for="line2" class="form-label">บรรทัด 2</label>
+                      <input type="text" class="form-control" name="line2" placeholder="บรรทัด 2">
+                      </div>
+
+                  <div class="mb-3">
+                      <label for="line3" class="form-label">บรรทัด 3</label>
+                      <input type="text" class="form-control" name="line3" placeholder="บรรทัด 3">
+                      </div>';
+                  }
+                  ?>
+                <input type="hidden" name="id" value="<?=$_GET['id']?>" > 
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit" name="submit" class="btn"> <i class="fas fa-save"></i> บันทึก</button>
+                </div> 
             </form>
+
           </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </div> 
 
 
+<?php
+//รับ dp
+	$sql_dp = "SELECT `dp` FROM `admin` WHERE `username` = '$username' ";
+	$result_dp  = mysqli_query($con,$sql_dp ); 
+	
+		if (false === $result_dp) {
+		die(mysqli_error($con));
+		}
+	
+			while ($row_dp = mysqli_fetch_assoc($result_dp)) {
+				$dp_data = $row_dp['dp'];
+					break;
+		}
+?>
+
+<script>	
+$(document).ready(function () {
+setInterval(function(){
+  $.ajax({
+      type:'POST',
+      url:'sql/admin/ajax_count.php',
+      data : {function:'user'},
+      dataType : 'json',
+      success:function(html){
+          $('#all_user').html(html);
+      }
+  });
+
+  $.ajax({
+      type:'POST',
+      url:'sql/admin/ajax_count.php',
+      data : {function:'project'},
+      dataType : 'json',
+      success:function(html){
+          $('#all_project').html(html);
+      }
+  });
+
+  $.ajax({
+      type:'POST',
+      url:'sql/admin/ajax_count.php',
+      data : {function:'admin'},
+      dataType : 'json',
+      success:function(html){
+          $('#all_admin').html(html);
+      }
+  });
+}, 1000);
+
+});
 
 
+</script>	
 
-
-
-
-<!--- Footer --->
-<?php require('structure/footer.php'); ?>
-
-<!-- Script -->
-<?php require('structure/script.php'); ?>
-
-<!-- Script DataTable - LoadProject-->
-<script>
-  $(document).ready(function() {
-   var table = $('#adminloadproject').DataTable( {
-        "processing": true,
+<!-- Script DataTable-->  
+<script >
+$(document).ready(function() {
+  
+  var table = $('#loadproject').DataTable( {
+        //"processing": true,
         "serverSide": true,
-        "ajax": "adminloadproject.php",
+        "ajax": "sql/admin/loadproject.php?dp=<?=$dp_data?>",
         "language" : {
               "emptyTable": "ไม่มีข้อมูลในตาราง",
               "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
@@ -255,13 +512,22 @@ if (!isset($_SESSION['username'])) {
         "columns": [
         { "width": "7%" },
         { "width": "40%" },
-        { "width": "20%" },
-        { "width": "13%" },
-        { "width": "20%" }
+        { "width": "33%" },
+        { "width": "15%" },
+        { "width": "5%" }
          ],
-        responsive: true
+
+         responsive: true
     } );
-    new $.fn.dataTable.FixedHeader( table );
+    
+
+    table.on('draw.dt', function () {
+    var info = table.page.info();
+    table.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1 + info.start;
+    });
+    });
+
 } );
 </script>
 
@@ -269,12 +535,7 @@ if (!isset($_SESSION['username'])) {
 <!-- Script DataTable - SettingPj Button -->
 <script>
 function SettingPj(id){
-        $.ajax({
-          url:"admin_project.php",
-          method: "POST",
-          data: {id:id}
-        })
-        location.href = "admin_project.php"
+        window.location.href='admin_pj.php?id=' + id;
       }
 </script>
 
@@ -296,13 +557,23 @@ function DeletePj(){
     var id = $('#id-d').val();
 
         $.ajax({
-            url:'admindeleteproject.php',
+            url:'sql/admin/deleteproject.php',
             method: 'POST',
             data: {id:id},
             success:function(data){
-             alert('ลบข้อมูลข้อมูลสำเร็จ');
-              $('#adminloadadmin').DataTable().draw();
               $('#DeletePj').modal('toggle');
+              swal("สำเร็จ!", "ลบโครงการ/กิจกรรมสำเร็จ [SUCCESS]", {
+              icon : "success",
+              buttons: {
+                confirm: {
+                  text: "ตกลง",
+                  className : 'btn btn-success'
+                }
+              },
+              }).then(function() {
+              $('#loadproject').DataTable().draw();
+              
+            });
             }
           })
   }
@@ -320,7 +591,7 @@ function DeletePj(){
     $('#id-e').val(id);
 
     $.ajax({
-        url:'admineditproject_insert.php',
+        url:'sql/admin/insertproject.php',
         method: 'POST',
         data: {id:id},
         success:function(data){
@@ -338,27 +609,64 @@ function EditPj(){
     var date = $('#date').val();
     var type = $('#type').val();
         $.ajax({
-            url:'admineditproject.php',
+            url:'sql/admin/editproject.php',
             method: 'POST',
             data: {id:id,name:name,date:date,type:type},
             success:function(data){
-             alert('แก้ไขข้อมูลข้อมูลสำเร็จ');
-             $('#adminloadadmin').DataTable().draw();
-             $('#EditPj').modal('toggle');
-            }
+            $('#EditPj').modal('toggle');
+            swal("สำเร็จ!", "แก้ไขโครงการ/กิจกรรมสำเร็จ [SUCCESS]", {
+            icon : "success",
+            buttons: {
+              confirm: {
+                text: "ตกลง",
+                className : 'btn btn-success'
+              }
+            },
+            }).then(function() {
+            $('#loadproject').DataTable().draw();
+
+          });
+        
+                  }
           })    
 }
 </script>
 
 
-<!-- Script Link Show Project-->  
-<script>
-function SettingPj(id){
-    window.location.href='admin_editpj.php?id=' + id;
-      }
 
-</script>
+<?php if(isset($_SESSION['msg_w'])){ ?>
+<script>	
+	swal("พบข้อผิดพลาด!", "<?=$_SESSION['msg_w']?>", {
+		icon : "warning",
+		buttons: {
+			confirm: {
+				text: "ตกลง",
+				className : 'btn btn-warning'
+			}
+		},
+		}).then(function() {
+		<?php unset($_SESSION['msg_w']) ?>
+		//
+	});
+</script>	
+
+<?php }; ?>
+
+<?php if(isset($_SESSION['msg_s'])){ ?>
+<script>	
+	swal("สำเร็จ!", "<?=$_SESSION['msg_s']?>", {
+		icon : "success",
+		buttons: {
+			confirm: {
+				text: "ตกลง",
+				className : 'btn btn-success'
+			}
+		},
+		}).then(function() {
+		<?php unset($_SESSION['msg_s']) ?>
+		//
+	});
+</script>	
+<?php }; ?>
 
 
-</body>
-</html>

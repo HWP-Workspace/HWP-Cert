@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 22, 2021 at 10:48 PM
+-- Generation Time: Sep 05, 2021 at 08:24 PM
 -- Server version: 10.2.27-MariaDB
 -- PHP Version: 7.3.27
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `longtime_cer`
+-- Database: `hwpcom_cert`
 --
 
 -- --------------------------------------------------------
@@ -42,7 +42,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `username`, `password`, `name`, `dp`, `shortdp`) VALUES
-(26, 'admin', 'c93ccd78b2076528346216b3b2f701e6', 'ผู้ดูแลระบบ', 'กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี', 'กวท');
+(1, 'admin', 'c93ccd78b2076528346216b3b2f701e6', 'ผู้ดูแลระบบสูงสุด', 'งานคอมพิวเตอร์', 'งคพ');
 
 -- --------------------------------------------------------
 
@@ -129,7 +129,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `project`

@@ -1,34 +1,110 @@
-<!-- Nav -->
-<nav class="navbar navbar-expand-lg" id="navbar-custom"> 
-  <div class="container">
-    <a class="navbar-brand" id="text-heading-nav" href="index.php">  
-      <img src="img/fav.ico" alt="" width="25" height="25"> ระบบพิมพ์เกียรติบัตรออนไลน์</a>
+<?php
+	if(isset($_SESSION['username'])){
+	$username = $_SESSION['username'];
+	
+	
+	//รับ Name
+	$sql_name = "SELECT `name` FROM `admin` WHERE `username` = '$username' ";
+	$result_name  = mysqli_query($con,$sql_name ); 
+	
+		if (false === $result_name) {
+		die(mysqli_error($con));
+		}
+	
+			while ($row_name = mysqli_fetch_assoc($result_name)) {
+				$name_data = $row_name['name'];
+					break;
+		}
 
-    <!--Nav Toggle-->
-    <button class ="nav-toggle-responsive" type="button" data-bs-toggle="collapse" data-bs-target="#nav-main-link" aria-controls="nav-main-link" 
-    aria-expanded="false" aria-label="Toggle navigation">
-      <i class="fas fa-bars"></i>
-    </button>
+	//รับ shortdp
+	$sql_sdp = "SELECT `shortdp` FROM `admin` WHERE `username` = '$username' ";
+	$result_sdp  = mysqli_query($con,$sql_sdp ); 
+	
+		if (false === $result_sdp) {
+		die(mysqli_error($con));
+		}
+	
+			while ($row_sdp = mysqli_fetch_assoc($result_sdp)) {
+				$sdp_data = $row_sdp['shortdp'];
+					break;
+		}
+	
+	
+}
+?>
 
-    <!--Nav Menu-->
-        <div class="collapse navbar-collapse" id="nav-main-link">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 sub-menu">
-              <li class="nav-item">
-              <a class="d-block" id="text-sub-menu" aria-current="page" href="index.php"> <i class="fas fa-home icon-main"></i> หน้าแรก</a> 
-              </li>
+<div class="wrapper">
+		<div class="main-header">
+			<!-- Logo Header -->
+			<div class="logo-header" data-background-color="purple">
+				
+				<a href="index.php" class="logo">
+				<!--	<img src="img/logo-nav.png" alt="navbar brand" class="navbar-brand" > -->
+				</a>
+				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon">
+						<i class="icon-menu"></i>
+						
+					</span>
+				</button>
 
-              <li class="nav-item">
-                <?=(isset($_SESSION['username'])) ? '<a class="d-block" id="text-sub-menu" href="admin.php"> 
-                <i class="fas fa-cog icon-main"></i> บริหารจัดการระบบ</a>
-                
-                <li class="nav-item"> <a class="d-block" id="text-sub-menu" href="logout.php">
-                <i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a> </li>'
+			<?php 
+			if (isset($_SESSION['username']) ) {
+			?>
+			<button class="topbar-toggler more"><i class="icon-options-vertical"></i></button> <?php } ?>
 
-                  : '<button class="d-block" id="button-login" class="text-sub-menu" herf="#" data-bs-toggle="modal" 
-                  data-bs-target="#exampleModal"> <i class="fas fa-lock icon-main"></i> ล็อกอิน </button>
-                  ' ;?>
-              </li>
-            </ul>
-        </div>
-  </div>
-</nav>
+							<div class="nav-toggle">
+								<button class="btn btn-toggle toggle-sidebar">
+									<i class="icon-menu"></i>
+								</button>
+							</div>
+						</div>
+						<!-- End Logo Header -->
+
+						<!-- Navbar Header -->
+						<nav class="navbar navbar-header navbar-expand-lg" data-background-color="purple2">
+
+			<?php 
+			
+			if (isset($_SESSION['username']) ) {
+			?>
+
+							<div class="container-fluid">
+							
+								<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+									<li class="nav-item dropdown hidden-caret">
+										<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+											<div class="avatar-sm">
+											<img src="img/avatar-default.png" alt="profile" class="avatar-img rounded-circle">
+											</div>
+										</a>
+										<ul class="dropdown-menu dropdown-user animated fadeIn">
+											<div class="dropdown-user-scroll scrollbar-outer">
+												<li>
+													<div class="user-box">
+														<div class="avatar-lg"><img src="img/avatar-default.png" alt="profile" class="avatar-img rounded-circle"></div>
+													
+														<div class="u-text">
+															<h6 class="mb-0 pt-2"><?php echo $name_data ?></h6>
+															<small class="text-muted mt-0 mb-0"><?php echo $sdp_data ?></small>
+															
+														</div>
+													</div>
+												</li>
+												<li>
+												
+													<div class="dropdown-divider"></div>
+													<a class="dropdown-item text-center" href="logout.php"> <h6 class="mb-0" ><i class="fas fa-power-off text-danger"></i> ออกจากระบบ</h6> </a>
+												</li>
+											</div>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</nav>
+						<!-- End Navbar -->
+
+			<?php } ?>
+
+
+		</div>

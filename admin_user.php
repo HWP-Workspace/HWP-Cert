@@ -1,143 +1,197 @@
-<?php 
-  session_start();
-// เช็คล็อกอิน ถ้าหากไม่มี ให้กลับไปหน้า index.php
-if (!isset($_SESSION['username'])) {
-  header('location: index.php');
-}
-
-// session admin เท่านั้นจึงจะเข้าสู่หน้านี้ได้
-if ($_SESSION['username'] != "admin") {
-  header('location: admin.php');
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<!--- Head --->
-<?php require('structure/head.php'); ?>
+<!-- Head -->
+<?php 
+session_start();
+require('connect.php');
+require('structure/head.php'); 
+
+if(!isset($_SESSION['username'])){
+	header('location: index.php');
+}
+
+if($_SESSION['username'] !== "admin"){
+	header('location: admin.php');
+}
+?>
 
 </head>
 <body>
 
-<!--- Nav --->
+
+<!-- Nav -->
 <?php require('structure/nav.php'); ?>
 
-<!--- Card Content --->
-<div class="container pt-4">
-  <div class="card-deck mb-1">
-    <!--- Card Content - Sub --->
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header text-white" id= "card-content-admin"> <h5 class="mt-2"> <i class="fas fa-user-shield"></i> สำหรับเจ้าหน้าที่</h5></div>
-      <div class="card-body">
-        <div class="card-header">
-          <div class="float-end text-white">
-            <button class="btn bg-primary text-white btn-sm"  data-bs-toggle="modal" data-bs-target="#AddAdmin" > <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
-        </div>
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link" id = "nav-admin-custom" href="admin.php">โครงการ/กิจกรรม</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active"  href="admin_user.php">บัญชีผู้ใช้</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id = "nav-admin-custom" href="admin_setting.php">ตั้งค่าระบบ</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link "  id = "nav-admin-custom" href="admin_tempate.php" >เทมเพลต</a> 
-            </li>
-          </ul>
-        </div>
-      </div> 
-      <div class="card-body">
-            <table id="loadadmin" class="table table-bordered nowrap" style="width:100%">
-                    <thead class="table-light ">
-                        <tr>
-                            <th>เลขที่</th>
-                            <th>ชื่อผู้ใช้</th>
-                            <th>ชื่อผู้ดูแล</th>
-                            <th>กลุ่ม/งาน</th>
-                            <th>ชื่อย่อ กลุ่ม/งาน</th>
-                            <th>ดำเนินการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td> </td>
-                          <td> </td>
-                          <td> </td>
-                          <td> </td>
-                          <td> </td> 
-                          <td> </td>
-                        </tr>
-                    </tbody>
-                </table>
-        </div>
-     </div>
-  </div> 
-</div>
 
-  <!-- Modal Edit Project-->
-  <div class="modal fade" id="EditAdmin" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5>แก้ไขข้อมูลผู้ดูแลระบบ</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form  onsubmit="EditAdmin()">
-                  <div class="mb-3">
-                      <label for="name" class="form-label">ชื่อผู้ใช้</label>
-                      <input type="text" class="form-control" id="username" disabled>
-                      <div class="form-text">ชื่อผู้ใช้ไม่สามารถซ้ำกันได้</div>
-                  </div>
+		<!-- Sidebar -->
+		<div class="sidebar sidebar-style-2">			
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+						<div class="sidebar-content">
 
-                  <div class="mb-3">
-                      <label for="name" class="form-label">ชื่อผู้ดูแล</label>
-                      <input type="text" class="form-control" id="name" required>
-                  </div>
-                  
-                  <div class="mb-3">
-                      <label for="dp" class="form-label">กลุ่ม/งาน</label>
-                      <input type="text" class="form-control" id="dp" required>
-                  </div>
+							<ul class="nav nav-secondary">
+								<li class="nav-item">
+									<a href="admin.php">
+										<i class="fas fa-home"></i>
+										<p>หน้าแรก</p>
+									</a>
 
-                  <div class="mb-3">
-                      <label for="shortdp" class="form-label">ชื่อย่อกลุ่ม/งาน</label>
-                      <input type="text" class="form-control" id="shortdp" required>
-                  </div>
+								</li>
+								<li class="nav-section">
+									<span class="sidebar-mini-icon">
+										<i class="fa fa-ellipsis-h"></i>
+									</span>
+									<h4 class="text-section">แถบเมนู</h4>
+								</li>
 
-                  <hr>
-                  <div class="mb-3">
-                      <label for="name" class="form-label">รหัสผ่าน (ถ้าต้องการแก้ไข)</label>
-                      <input type="password" class="form-control" id="password" minlength="8">
-                  </div>
+                                <li class="nav-item active">
+									<a data-toggle="collapse" href="#base">
+									<i class="fas fa-cog"></i>
+										<p>ตั้งค่าระบบ</p>
+										<span class="caret"></span>
+									</a>
+									<div class="collapse" id="base">
+										<ul class="nav nav-collapse">
+											<li>
+												<a href="admin_config.php">
+													<span class="sub-item">ตั้งค่าทั่วไป</span>
+												</a>
+											</li>
 
-                  <input type="hidden" id="id">
-                  <div class="text-center">
-                <button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
-                </form>
-              </div>
-              </div>
-            </div>
-          </div>
-</div>
+											<li>
+												<a href="">
+													<span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+												</a>
+											</li>
 
- <!-- Modal Add Admin -->
-<div class="modal fade" id="AddAdmin" tabindex="-1">
+											</li>
+										</ul>
+									</div>
+								</li>
+
+
+                                <li class="nav-item">
+									<a href="admin_tempate.php" >
+										<i class="fas fa-file"></i>
+										<p>เทมเพลต</p>
+									</a>
+								</li>
+
+							</ul>
+
+
+
+						</div>
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="panel-header bg-secondary-gradient">
+					<div class="page-inner py-5">
+						<div class="text-center">
+
+							<div>
+							<img class="d-inline mb-3" src="img/fav.ico" width="100" height="100">
+							</div>
+
+							<div>
+
+								<h2 class="d-block text-white mb-1 fw-bold">ระบบพิมพ์เกียรติบัตรออนไลน์</h2>
+								<h5 class="d-inline text-white op-7 mb-2"><?= $nameschool_data ?></h5>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="page-inner mt--5">
+
+					<div class="card">
+						<h2 class="card-header"> <b>ตั้งค่าผู้ดูแลระบบ</b>
+                        <div class="float-right text-white">
+                        <button class="btn btn-sm bg-primary text-white" data-toggle="modal" data-target="#AddUser" >  <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
+                         </div>
+                         </h2>
+						<div class="card-body">
+
+
+							<table id="loaduser" class="table nowrap" style="width:100%">
+									<thead class="table-light">
+										<tr>
+											<th>ลำดับที่</th>
+											<th>ชื่อ-นามสกุล</th>
+                                            <th>ชื่อผู้ใช้</th>
+											<th>กลุ่ม/งาน</th>
+											<th>ชื่อย่อ</th>
+											<th>ดำเนินการ</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+											<td> </td>
+                                            <td> </td>
+										</tr>
+									</tbody>
+							</table>
+
+
+
+						</div>
+					
+					</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>	
+			</div>
+
+
+			<!-- Footer-->
+			<?php require('structure/footer.php'); ?>
+
+
+
+		</div>
+		
+	</div>
+
+<!-- Script-->
+<?php require('structure/script.php'); ?>
+
+
+ <!-- Modal Add User -->
+ <div class="modal fade" id="AddUser" tabindex="-1">
     <div class="modal-dialog ">
       <div class="modal-content ">
         <div class="modal-header">
-          <h5> เพิ่มผู้ดูแลระบบ </h5> 
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3> เพิ่มผู้ดูแลระบบ </h3> 
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            	</button>
         </div>
         <div class="modal-body">
 
-              <form action="admincreateadmin.php" method="post">
+              <form action="sql/admin/adduser.php" method="post">
                 <div class="mb-3">
                     <label class="form-label" for="username">ชื่อผู้ใช้</label>
                     <input class="form-control" type="text" name="username"  placeholder="ชื่อผู้ใช้" minlength="5" required>
@@ -163,11 +217,13 @@ if ($_SESSION['username'] != "admin") {
                   <div class="mb-3">
                       <label for="dp" class="form-label">กลุ่ม/งาน</label>
                       <input type="text" class="form-control" name="dp" placeholder="กลุ่ม/งาน" required>
+								      <small class="form-text text-muted text-danger">กรุณาตั้งค่ากลุ่ม/งาน ให้ตรงกันหากมีมากกว่า 1 ผู้ใช้งาน</small>		
                   </div>
 
                   <div class="mb-3">
                       <label for="shortdp" class="form-label">ชื่อย่อกลุ่ม/งาน</label>
                       <input type="text" class="form-control" name="shortdp" placeholder="ชื่อย่อกลุ่ม/งาน" required>
+								      <small class="form-text text-muted text-danger">ข้อมูลนี้นำไปใช้รันเกียรติบัตร</small>		
                   </div>
 
                 <div class="text-center">
@@ -180,26 +236,29 @@ if ($_SESSION['username'] != "admin") {
       </div>
 </div>
 
+
 <!-- Modal Delete -->
-<div class="modal fade" id="DeleteAdmin" tabindex="-1">
+<div class="modal fade" id="DeleteUser" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">คุณกำลังจะลบผู้ใช้งาน ?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3 class="modal-title">คุณกำลังจะลบผู้ใช้งาน ?</h3>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            	</button>
       </div>
           <div class="modal-body text-center">
           <form>
             <i class="mt-2 mb-2 fas fa-exclamation-circle fa-8x text-danger"></i>
 
-            <h5 class="mt-3">คุณแน่ใจไหมที่จะลบผู้ใช้งาน</h5>
-            <h6 class="mt-1">หากกลบแล้วผู้ใช้งานจะไม่สามารถเข้าสู่ระบบได้</h5>
+            <h3 class="mt-3">คุณแน่ใจไหมที่จะลบผู้ใช้งาน</h3>
+            <h4 class="mt-1">หากกลบแล้วผู้ใช้งานจะไม่สามารถเข้าสู่ระบบได้</h4>
 
           </div>
           <div class="mb-4 mt-3 text-center"> 
           <input type="hidden" id="id-d">
-            <button type="submit" onclick="DeleteAdmin()" class="btn btn-danger">ลบ</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="button" onclick="DeleteUser()" class="btn btn-danger"><i class="far fa-trash-alt"></i> ลบ</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  ยกเลิก</button>
             </form>
       </div>
     </div>
@@ -207,19 +266,66 @@ if ($_SESSION['username'] != "admin") {
 </div>
 
 
-<!--- Footer --->
-<?php require('structure/footer.php'); ?>
+  <!-- Modal Edit Project-->
+  <div class="modal fade" id="EditUser" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>แก้ไขข้อมูลผู้ดูแลระบบ</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            	</button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                      <label for="name" class="form-label">ชื่อผู้ใช้</label>
+                      <input type="text" class="form-control" id="username" disabled>
+                      <div class="form-text">ชื่อผู้ใช้ไม่สามารถซ้ำกันได้</div>
+                  </div>
 
-<!-- Script -->
-<?php require('structure/script.php'); ?>
+                  <div class="mb-3">
+                      <label for="name" class="form-label">ชื่อผู้ดูแล</label>
+                      <input type="text" class="form-control" id="name" required>
+                  </div>
+                  
+                  <div class="mb-3">
+                      <label for="dp" class="form-label">กลุ่ม/งาน</label>
+                      <input type="text" class="form-control" id="dp" required>
+								      <small class="form-text text-muted text-danger">กรุณาตั้งค่ากลุ่ม/งาน ให้ตรงกันหากมีมากกว่า 1 ผู้ใช้งาน</small>		
+                  </div>
 
-<!-- Script DataTable - LoadAdmin -->
-<script>
-  $(document).ready(function() {
-   var table = $('#loadadmin').DataTable( {
-        "processing": true,
+                  <div class="mb-3">
+                      <label for="shortdp" class="form-label">ชื่อย่อกลุ่ม/งาน</label>
+                      <input type="text" class="form-control" id="shortdp" required>
+								      <small class="form-text text-muted text-danger">ข้อมูลนี้นำไปใช้รันเกียรติบัตร</small>
+                  </div>
+
+                  <hr>
+                  <div class="mb-3">
+                      <label for="name" class="form-label">รหัสผ่าน (ถ้าต้องการแก้ไข)</label>
+                      <input type="password" class="form-control" id="password" minlength="8">
+                  </div>
+
+                  <input type="hidden" id="id">
+                  <div class="text-center">
+                <button type="button" onclick="EditUser()" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
+                </form>
+              </div>
+              </div>
+            </div>
+          </div>
+</div>
+
+
+<!-- Script DataTable-->  
+<script >
+$(document).ready(function() {
+  
+  var table = $('#loaduser').DataTable( {
+       // "processing": true,
         "serverSide": true,
-        "ajax": "adminloadadmin.php",
+        "ajax": "sql/admin/loaduser.php",
         "language" : {
               "emptyTable": "ไม่มีข้อมูลในตาราง",
               "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
@@ -256,24 +362,70 @@ if ($_SESSION['username'] != "admin") {
                   "copyKeys": "กดปุ่ม Ctrl หรือ Command + C เพื่อคัดลอกข้อมูลบนตารางไปยัง Clipboard ที่เครื่องของคุณ"
               }
           },
-        "order": [[ 0, "desc" ]],
+        "order": [[ 0, "asc" ]],
         "columns": [
-        { "width": "8%" },
-        { "width": "16%" },
-        { "width": "22%" },
+        { "width": "7%" },
         { "width": "30%" },
+        { "width": "13%" },
+        { "width": "33%" },
         { "width": "15%" },
-        { "width": "9%" }
-      ],
-        responsive: true
+        { "width": "5%" }
+         ],
+
+         responsive: true
     } );
-    new $.fn.dataTable.FixedHeader( table );
+
+    table.on('draw.dt', function () {
+    var info = table.page.info();
+    table.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1 + info.start;
+    });
+    });
+
 } );
 </script>
 
-<!-- Script DataTable - DeleteAdmin Button -->
+
+<?php if(isset($_SESSION['msg_w'])){ ?>
+<script>	
+	swal("พบข้อผิดพลาด!", "<?=$_SESSION['msg_w']?>", {
+		icon : "warning",
+		buttons: {
+			confirm: {
+				text: "ตกลง",
+				className : 'btn btn-warning'
+			}
+		},
+		}).then(function() {
+		<?php unset($_SESSION['msg_w']) ?>
+		//location.reload();
+	});
+</script>	
+
+<?php }; ?>
+
+<?php if(isset($_SESSION['msg_s'])){ ?>
+<script>	
+	swal("สำเร็จ!", "<?=$_SESSION['msg_s']?>", {
+		icon : "success",
+		buttons: {
+			confirm: {
+				text: "ตกลง",
+				className : 'btn btn-success'
+			}
+		},
+		}).then(function() {
+		<?php unset($_SESSION['msg_s']) ?>
+		//location.reload();
+	});
+</script>	
+
+<?php }; ?>
+
+
+<!-- Script DataTable - DeleteUser Button -->
 <script>
-  $('#DeleteAdmin').on('shown.bs.modal', function (event) {
+  $('#DeleteUser').on('shown.bs.modal', function (event) {
 
     var button = $(event.relatedTarget);
     var id = button.data('whatever');
@@ -282,26 +434,37 @@ if ($_SESSION['username'] != "admin") {
     $('#id-d').val(id);
 })
 
-function DeleteAdmin(){
+function DeleteUser(){
     var id = $('#id-d').val();
 
         $.ajax({
-            url:'admindeleteadmin.php',
+            url:'sql/admin/deleteuser.php',
             method: 'POST',
             data: {id:id},
             success:function(data){
-             alert('ลบข้อมูลข้อมูลสำเร็จ');
-              $('#adminloadadmin').DataTable().draw();
-              $('#DeleteAdmin').modal('toggle');
+              $('#DeleteUser').modal('toggle');
+			  swal("สำเร็จ!", "ลบข้อมูลผู้เข้าร่วมสำเร็จ [SUCCESS]", {
+				icon : "success",
+				buttons: {
+				confirm: {
+					text: "ตกลง",
+					className : 'btn btn-success'
+				}
+				},
+				}).then(function() {
+				$('#loaduser').DataTable().draw();
+
+			});
+
             }
           })
   }
 </script>
 
 
-<!-- Script DataTable - EditAdmin Button -->
+<!-- Script DataTable - EditUser Button -->
 <script>
-$('#EditAdmin').on('shown.bs.modal', function (event) {
+$('#EditUser').on('shown.bs.modal', function (event) {
 
       var button = $(event.relatedTarget) 
       var id = button.data('whatever') 
@@ -310,7 +473,7 @@ $('#EditAdmin').on('shown.bs.modal', function (event) {
       $('#id').val(id);
 
       $.ajax({
-          url:'admineditadmin_insert.php',
+          url:'sql/admin/insertuser.php',
           method: 'POST',
           data: {id:id},
           success:function(data){
@@ -324,7 +487,7 @@ $('#EditAdmin').on('shown.bs.modal', function (event) {
 })
 
 
-function EditAdmin(){
+function EditUser(){
     var id = $('#id').val();
     var name = $('#name').val();
     var username = $('#username').val();
@@ -333,18 +496,25 @@ function EditAdmin(){
     var shortdp = $('#shortdp').val();
 
         $.ajax({
-            url:'admineditadmin.php',
+            url:'sql/admin/edituser.php',
             method: 'POST',
             data: {id:id,username:username,password:password,name:name,dp:dp,shortdp:shortdp},
             success:function(data){
-              alert('แก้ไขข้อมูลข้อมูลสำเร็จ')
-              $('#loadadmin').DataTable().draw()
-              $('#EditAdmin').modal('toggle')
+			  $('#EditUser').modal('toggle');
+			  swal("สำเร็จ!", "แก้ไขผู้ดูแลระบบสำเร็จ [SUCCESS]", {
+				icon : "success",
+				buttons: {
+				confirm: {
+					text: "ตกลง",
+					className : 'btn btn-success'
+				}
+				},
+				}).then(function() {
+				$('#loaduser').DataTable().draw();
+
+			});
+
             }
           })
 }
 </script>
-
-
-</body>
-</html>

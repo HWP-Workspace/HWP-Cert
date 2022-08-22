@@ -11,25 +11,29 @@ require('connect.php');
 ?>
 
 <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบพิมพ์เกียรติบัตรออนไลน์ | <?php echo $nameschool_data ?> </title>
-    <link rel="icon" href="img/fav.ico" type="image/x-icon"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>ระบบพิมพ์เกียรติบัตรออนไลน์ | <?= $nameschool_data ?></title>
+	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+	<link rel="icon" href="img/fav.ico" type="image/x-icon"/>
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <!-- Google Font -->	
-    <link href='https://fonts.googleapis.com/css?family=Sarabun' rel='stylesheet' type='text/css'>
+	<link href='css/main.css' rel='stylesheet' type='text/css'>
 
-    <awsome>
-    <!-- Awesome Font -->
-    <script src="https://kit.fontawesome.com/d662a0dcd0.js" crossorigin="anonymous"></script>
-    <!-- Css -->
-    <link href="css/main.css" rel="stylesheet">
-    <!-- Table -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
-    <!-- DataTable Responsive-->  
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap.min.css">
-    
+	<!-- Fonts and icons -->
+	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
+
+	<script>
+		WebFont.load({
+			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['assets/css/fonts.min.css']},
+			active: function() {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/atlantis.min.css">
+
+	<!-- CSS DT -->
+	<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
