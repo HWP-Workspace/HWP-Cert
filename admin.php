@@ -28,7 +28,7 @@ if(!isset($_SESSION['username'])){
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 						<div class="sidebar-content">
 
-							<ul class="nav nav-secondary">
+							<ul class="nav nav-primary">
 								<li class="nav-item">
 									<a href="index.php">
 										<i class="fas fa-home"></i>
@@ -98,7 +98,7 @@ if(!isset($_SESSION['username'])){
 
 		<div class="main-panel">
 			<div class="content">
-				<div class="panel-header bg-secondary-gradient">
+				<div class="panel-header bg-primary-gradient">
 					<div class="page-inner py-5">
 						<div class="text-center">
 
@@ -118,7 +118,7 @@ if(!isset($_SESSION['username'])){
         <!-- Card -->
         <div class="row">
             <div class="col-sm-6 col-md-4 d-none d-xl-block">
-                <div class="card card-stats card-secondary card-round">
+                <div class="card card-stats card-primary card-round">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-5">
@@ -137,7 +137,7 @@ if(!isset($_SESSION['username'])){
                 </div>
             </div>
             <div class="col-sm-6 col-md-4 d-none d-xl-block">
-                <div class="card card-stats card-secondary card-round">
+                <div class="card card-stats card-primary card-round">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-5">
@@ -156,7 +156,7 @@ if(!isset($_SESSION['username'])){
                 </div>
             </div>
             <div class="col-sm-6 col-md-4 d-none d-xl-block">
-                <div class="card card-stats card-secondary card-round">
+                <div class="card card-stats card-primary card-round">
                     <div class="card-body ">
                         <div class="row">
                             <div class="col-5">

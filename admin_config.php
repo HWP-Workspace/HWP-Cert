@@ -31,7 +31,7 @@ if($_SESSION['username'] !== "admin"){
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 						<div class="sidebar-content">
 
-							<ul class="nav nav-secondary">
+							<ul class="nav nav-primary">
 								<li class="nav-item">
 									<a href="index.php">
 										<i class="fas fa-home"></i>
@@ -103,7 +103,7 @@ if($_SESSION['username'] !== "admin"){
 
 		<div class="main-panel">
 			<div class="content">
-				<div class="panel-header bg-secondary-gradient">
+				<div class="panel-header bg-primary-gradient">
 					<div class="page-inner py-5">
 						<div class="text-center">
 

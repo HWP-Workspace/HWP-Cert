@@ -49,7 +49,7 @@
 <div class="wrapper">
 		<div class="main-header">
 			<!-- Logo Header -->
-			<div class="logo-header" data-background-color="purple">
+			<div class="logo-header" data-background-color="blue">
 				
 				<a href="index.php" class="logo">
 				<!--	<img src="img/logo-nav.png" alt="navbar brand" class="navbar-brand" > -->
@@ -75,7 +75,7 @@
 						<!-- End Logo Header -->
 
 						<!-- Navbar Header -->
-						<nav class="navbar navbar-header navbar-expand-lg" data-background-color="purple2">
+						<nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
 
 			<?php 
 			

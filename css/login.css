@@ -1,13 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 html,
 body {
 
-  /* หากต้องการใส่รูปพื้นหลัง กรุณาแก้ตรงนี้
-   background: url(img/bg.jpg) no-repeat top center fixed; 
-   color: #ffffff; 
-*/ 
-  /* และ Comment บรรทัดนี้*/
-  background-color: #f5f5f5;
+   background: url(../img/bg-login.png) no-repeat right center fixed; 
+
+  /* และ Comment บรรทัดนี้
+  /*background-color: #f5f5f5;*/
 
   font-family: 'Kanit' !important;
 
