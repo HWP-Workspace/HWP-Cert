@@ -1,0 +1,119 @@
+
+/* Font Website*/
+body{
+font-family: 'Sarabun';
+background-color:#f9fbfd;
+font-size: 16px;
+}
+
+
+/* Nav Background */
+#navbar-custom{
+
+    background: #1572e8; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #074fad , #1572e8); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #074fad, #1572e8); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #074fad, #1572e8); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #074fad , #1572e8); /* Standard syntax */
+
+}
+
+.footer-main{
+    color: #3f3f3f;
+}
+
+#credit-footer{
+
+    color: #3f3f3f;
+}
+
+/* Text Nav*/ 
+#text-heading-nav{
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+}
+
+#text-sub-menu:link{
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+
+}
+
+.icon-main{
+    font-size: 12px;
+    margin-right: 3px;
+}
+
+
+/* Cerdit by Link color*/
+a{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Nav Responsive*/
+
+.nav-toggle-responsive{
+    background:transparent;
+    color:white;
+    border: none;
+}
+
+@media (min-width: 992px) {
+    .navbar-expand-lg .nav-toggle-responsive {
+        display: none;
+    }
+    
+}
+
+
+/* Button Login*/
+#button-login{
+border: none;
+color: white;
+background-color: transparent;
+padding-top: 10px;
+padding-left: 10px;
+padding-bottom: 10px;
+}
+
+/* Background Content*/
+
+#card-content{
+    background-color : #0F52BA;
+}
+
+#card-content-admin{
+    background-color : #0d9943;
+}
+
+#card-content-admin-project{
+    background-color : #cc7007;
+}
+
+#card-content-admin-project-tempate{
+    background-color : #cc0791;
+}
+/* Admin Text */
+#nav-admin-custom{
+color: black;
+}
+
+.img-cert{
+    max-width: 100%;
+    height: auto;
+}
+
+/* index.php */ 
+.school-name{
+    color:#5c5c5c;
+}

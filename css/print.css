@@ -1,0 +1,47 @@
+body {
+    font-family: Sarabun;
+}
+
+.bg-qrcode{
+    border:3px solid white;
+    background-color: white;
+    
+}
+
+/* Type 0*/
+.name-0{
+  font-size: 48px;
+  padding-top: 210px;
+  text-align: center;
+}
+
+
+/* Type 1*/
+.name-1{
+    font-size: 42px;
+    padding-top: 190px;
+    text-align: center;
+}
+
+.line2-1{
+    font-size: 32px;
+    text-align: center;
+}
+
+
+/* Type 2*/
+.name-2{
+    font-size: 48px;
+    padding-top: 170px;
+    text-align: center;
+}
+
+.line2-2{
+    font-size: 32px;
+    text-align: center;
+}
+
+.line3-2{
+    font-size: 32px;
+    text-align: center;
+}
