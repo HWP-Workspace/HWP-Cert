@@ -234,7 +234,7 @@ class SSP {
 
 	/**
 	 * Perform the SQL queries needed for an server-side processing requested,
-	 * utilising the helper functions of this class, limit(), order() and
+	 * utilising the helper functions of this class, limit(), order() and 
 	 * filter() among others. The returned array is ready to be encoded as JSON
 	 * in response to an SSP request, or can be modified if needed before
 	 * sending back to the client.
@@ -401,7 +401,7 @@ class SSP {
 	{
 		try {
 			$db = @new PDO(
-				"mysql:host={$sql_details['host']};dbname={$sql_details['db']}",
+				"mysql:host={$sql_details['host']};dbname={$sql_details['db']};charset=UTF8",
 				$sql_details['user'],
 				$sql_details['pass'],
 				array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION )

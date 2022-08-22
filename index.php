@@ -75,53 +75,93 @@ if(isset($_SESSION['username'])){
 				</div>
 				<div class="page-inner mt--5">
 
-					<div class="card">
-						<h2 class="card-header"> <b>ตารางแสดงโครงการ/กิจกรรม</b></h2>
-						<div class="card-body">
+                <?php 
+                require('structure/datethai.php');
 
-							<table id="loadproject" class="table nowrap" style="width:100%">
-									<thead class="table-light">
-										<tr>
-											<th>ลำดับที่</th>
-											<th>โครงการ</th>
-											<th>กลุ่ม/งาน</th>
-											<th>วันที่</th>
-											<th>เกียรติบัตร</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td> </td>
-											<td> </td>
-											<td> </td>
-											<td> </td>
-											<td> </td>
-										</tr>
-									</tbody>
-							</table>
+                $perpage = 8;
+                if (isset($_GET['p'])) {
+                $page = $_GET['p'];
+                } else {
+                $page = 1;
+                }
+                $start = ($page - 1) * $perpage;
+                $query = "SELECT * FROM project ORDER BY id DESC LIMIT {$start} , {$perpage}" or die("Error:" . mysqli_error());
+                $result = mysqli_query($con, $query);
+                ?>
 
+                <div class="row justify-content-md-center">
+                <?php 
 
+                // path portion only with no domain and no server portions
+                $path_only = pathinfo($_SERVER['PHP_SELF'], 1); 
 
-						</div>
-					
-					</div>
+                // domain url portion only with no path
+                $domain_no_path = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}"; 
 
+                // domain url including path
+                $url =  $domain_no_path.$path_only;
 
+                while($row = mysqli_fetch_array($result)){ 
+                if($row["tempate"] == ''){
 
+                }else{
+                    $image = ''.$url.'./upload/tempate/' .$row["tempate"].'';
+                    $imageData = base64_encode(file_get_contents($image));
+                    $src = 'data: ' . ';base64,' . $imageData;
+                ?> 
+                      
+                    <div class="col-xl-3 col-xs-12 col-md-6 mb-4">   
+                        <div class="card h-90">
+                        <img class="card-img-top" style="pointer-events: none;" src="<?=$src?>" alt="Certificate Preview">
+                        <div class="card-body">
+                            <h6 class="card-title"><?=$row["name"]?></h6>
+                            <small class="card-text d-block" style="opacity: 0.7;"><?=$row["dp"]?></small>
+                            <small class="card-text d-block" style="opacity: 0.6;"><i class="text-primary pr-1 far fa-calendar-minus"></i><?=DateThai($row["date"])?></small>
+                            
+                            <div class="text-center mt-1">
+                            <button onclick="UserRow(<?=$row['id']?>)" class="btn btn-sm btn-primary "><i class="fas fa-user"></i> รายชื่อ</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>                    
+                <?php } } ?>
+                </div>
 
+                <?php
+                $sql2 = "SELECT * FROM project ";
+                $query2 = mysqli_query($con, $sql2);
+                $total_record = mysqli_num_rows($query2);
+                $total_page = ceil($total_record / $perpage);
+                ?>
 
+            <?php if($total_page > 1){?>                
+                <div class="mt-4 row justify-content-center"> 
+                    <nav>
+                    <ul class="pagination">
+                <?php if($page == 0){?> 
+                    <li class="page-item">
+                        <a class="page-link" href="index.php?p=1" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>                        
+                    </li>
+                <?php } ?>
+                    
+                    <?php for($i=1;$i<=$total_page;$i++){ ?>
+                    <?php if ($i == $page){ ?>
+                    <li class="page-item active" ><a class="page-link" href="index.php?p=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                    <?php }else{ ?>        
+                    <li class="page-item" ><a class="page-link" href="index.php?p=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                    <?php } } ?>
 
-
-
-
-
-
-
-
-
-
-
-
+                    <li class="page-item">
+                    <a class="page-link" href="index.php?p=<?php echo $total_page;?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    </li>
+                    </ul>
+                    </nav>  
+                </div>
+            <?php } ?>
 				</div>	
 			</div>
 
@@ -174,72 +214,6 @@ if(isset($_SESSION['username'])){
     </div>
   </div>
 </div>
-
-<!-- Script DataTable-->  
-<script >
-$(document).ready(function() {
-  
-  var table = $('#loadproject').DataTable( {
-        //"processing": true,
-        "serverSide": true,
-        "ajax": "sql/index/loadproject.php",
-        "language" : {
-              "emptyTable": "ไม่มีข้อมูลในตาราง",
-              "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-              "infoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
-              "infoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
-              "infoThousands": ",",
-              "lengthMenu": "แสดง _MENU_ แถว",
-              "loadingRecords": "กำลังโหลดข้อมูล...",
-              "processing": "กำลังดำเนินการ...",
-              "search": "ค้นหา: ",
-              "zeroRecords": "ไม่พบข้อมูล",
-              "paginate": {
-                  "first": "หน้าแรก",
-                  "previous": "ก่อนหน้า",
-                  "next": "ถัดไป",
-                  "last": "หน้าสุดท้าย"
-              },
-              "aria": {
-                  "sortAscending": ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
-                  "sortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
-              },
-              "autoFill": {
-                  "cancel": "ยกเลิก",
-                  "fill": "กรอกทุกช่องด้วย",
-                  "fillHorizontal": "กรอกตามแนวนอน",
-                  "fillVertical": "กรอกตามแนวตั้ง",
-                  "info": "ข้อมูลเพิ่มเติม"
-              },
-              "buttons": {
-                  "collection": "ชุดข้อมูล",
-                  "colvis": "การมองเห็นคอลัมน์",
-                  "colvisRestore": "เรียกคืนการมองเห็น",
-                  "copy": "คัดลอก",
-                  "copyKeys": "กดปุ่ม Ctrl หรือ Command + C เพื่อคัดลอกข้อมูลบนตารางไปยัง Clipboard ที่เครื่องของคุณ"
-              }
-          },
-        "order": [[ 0, "desc" ]],
-        "columns": [
-        { "width": "7%" },
-        { "width": "40%" },
-        { "width": "33%" },
-        { "width": "15%" },
-        { "width": "5%" }
-         ],
-
-         responsive: true
-    } );
-    
-
-    table.on('draw.dt', function () {
-    var info = table.page.info();
-    table.column(0, { search: 'applied', order: 'applied', page: 'applied' }).nodes().each(function (cell, i) {
-        cell.innerHTML = i + 1 + info.start;
-    });
-    });
-} );
-</script>
 
 <!-- Script Link Show User-->  
 <script>
