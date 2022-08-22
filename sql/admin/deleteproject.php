@@ -19,6 +19,7 @@ if(isset($_POST["id"])){
 
 // ลบ Teampate
     unlink('../../upload/tempate/'.$tempate_data);
+    unlink('../../upload/preview/preview_'.$tempate_data);
 
 // ลบ Project
     $sql = "DELETE FROM `project` WHERE `id` = ".$_POST["id"];

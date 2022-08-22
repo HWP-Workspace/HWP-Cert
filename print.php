@@ -1,18 +1,21 @@
 <?php
 require('connect.php');
+require('structure/numthai.php');
+require_once __DIR__ . '/vendor/autoload.php';
+
 //เงื่อนไข pj
 if(!empty($_GET['id'])){
     $idpj = mysqli_real_escape_string($con, $_GET['id']);
-    $sql_pj = "SELECT * FROM `project` WHERE `id` = '$idpj' ";
-    $result_pj = mysqli_query($con,$sql_pj);
+    $sql_ck_id = "SELECT * FROM `project` WHERE `id` = '$idpj' ";
+    $result_ck_id = mysqli_query($con,$sql_ck_id);
     
-    if (false === $result_pj) {
+    if (false === $result_ck_id) {
         die(mysqli_error($con));
       }
   
-    $num_pj = mysqli_num_rows($result_pj); 
+    $num_ck_id = mysqli_num_rows($result_ck_id); 
   
-    if($num_pj == 0){
+    if($num_ck_id == 0){
         header("location:index.php");
       }
 
@@ -24,19 +27,18 @@ if(!empty($_GET['id'])){
 
 
 //เงื่อนไข learn
-
 if(!empty($_GET['learn'])){
     $idlearn = mysqli_real_escape_string($con, $_GET['learn']);
-    $sql_learn = "SELECT * FROM `user` WHERE `id`=".$idlearn ;
-    $result_learn = mysqli_query($con,$sql_learn); 
+    $sql_ck_learn = "SELECT * FROM `user` WHERE `id`='$idlearn' AND idpj = '$idpj'";
+    $result_ck_learn = mysqli_query($con,$sql_ck_learn); 
 
-    if (false === $result_learn) {
+    if (false === $result_ck_learn) {
         die(mysqli_error($con));
       }
   
-    $num_learn = mysqli_num_rows($result_learn); 
+    $num_ck_learn = mysqli_num_rows($result_ck_learn); 
   
-    if($num_learn == 0){
+    if($num_ck_learn == 0){
         header("location:index.php");
       }
   
@@ -46,12 +48,7 @@ if(!empty($_GET['learn'])){
       header("location:index.php");
 }
 
-
-
-
-require('structure/numthai.php');
-require_once __DIR__ . '/vendor/autoload.php';
-
+///////////////////////////////////////////////////////////////////////////
 
 //รับ Tempate Img จาก idpj
 if(isset($_GET['id'])){
@@ -84,87 +81,20 @@ if (false === $result_nameschool) {
          break;
 }
 
+//รับชื่อฟอนต์
+if(isset($_GET['id'])){
+$idpj = mysqli_real_escape_string($con, $_GET['id']);
+$sql_font = "SELECT font FROM `project` WHERE id = '$idpj'";
+$result_font = mysqli_query($con,$sql_font); 
 
-//ดึงชื่อผู้เข้าร่วม
-if(isset($_GET['learn'])){
-  $idlearn = mysqli_real_escape_string($con, $_GET['learn']);
-  $sql_namelearn = "SELECT `name` FROM `user` WHERE `id`=".$idlearn ;
-  $result_namelearn = mysqli_query($con,$sql_namelearn); 
-
-  if (false === $result_namelearn) {
+if (false === $result_font) {
     die(mysqli_error($con));
 }
 
-      while ($row_namelearn = mysqli_fetch_assoc($result_namelearn)) {
-                 $namelearn_data = $row_namelearn['name'];
-                 break;
-      }
+    while ($row_font = mysqli_fetch_assoc($result_font)) {
+        $font_db = $row_font['font'];
+         break;
 }
-
-//ดึง line2
-if(isset($_GET['learn'])){
-    $idlearn = mysqli_real_escape_string($con, $_GET['learn']);
-    $sql_line2learn = "SELECT `line2` FROM `user` WHERE `id`=".$idlearn ;
-    $result_line2learn = mysqli_query($con,$sql_line2learn); 
-
-    if (false === $result_line2learn) {
-        die(mysqli_error($con));
-    }
-
-        while ($row_line2 = mysqli_fetch_assoc($result_line2learn)) {
-                   $line2learn_data = $row_line2['line2'];
-                   break;
-        }
-}
-
-//ดึง line3
-if(isset($_GET['learn'])){
-    $idlearn = mysqli_real_escape_string($con, $_GET['learn']);
-    $sql_line3learn = "SELECT `line3` FROM `user` WHERE `id`=".$idlearn ;
-    $result_line3learn = mysqli_query($con,$sql_line3learn); 
-
-    if (false === $result_line3learn) {
-        die(mysqli_error($con));
-    }
-
-        while ($row_line3learn = mysqli_fetch_assoc($result_line3learn)) {
-                   $line3learn_data = $row_line3learn['line3'];
-                   break;
-        }
-}
-  
-  
-
-//รับค่า Type
-if(isset($_GET['id'])){
-    $idpj = mysqli_real_escape_string($con, $_GET['id']);
-    $query_type = "SELECT `type` FROM `project` WHERE `id` = $idpj"; 
-    $result_type = mysqli_query($con,$query_type); 
-
-    if (false === $result_type) {
-        die(mysqli_error($con));
-    }
-
-    while ($row_type = mysqli_fetch_assoc($result_type)) {
-            $type_data = $row_type['type'];
-            break;
-    }
-}
-
-//รับค่า idcer
-if(isset($_GET['learn'])){
-    $idlearn = mysqli_real_escape_string($con, $_GET['learn']);
-    $query_idcer = "SELECT `idcer` FROM `user` WHERE `id` = $idlearn"; 
-    $result_idcer = mysqli_query($con,$query_idcer); 
-
-    if (false === $result_idcer) {
-        die(mysqli_error($con));
-    }
-
-    while ($row_idcer = mysqli_fetch_assoc($result_idcer)) {
-            $idcer_data = $row_idcer['idcer'];
-            break;
-    }
 }
 
 //ประกาศ Var Path Img
@@ -172,26 +102,41 @@ $path = 'upload/tempate/' ;
 $filename = $img_data ;
 $pathfile = $path.$filename ;
 
-//แปลงเลขไทย
-$idcerthai = thainumDigit($idcer_data);
-
 //ประกาศ Var Qrcode
 $qr = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
+
 // โหลด Liblary mPDF
-$mpdf = new \Mpdf\Mpdf( [
+$defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+$fontDirs = $defaultConfig['fontDir'];
+
+$defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+$fontData = $defaultFontConfig['fontdata'];
+
+$mpdf = new \Mpdf\Mpdf([
+    'debug' => true,
     'format'            => 'A4',
-    'mode'              => 'utf-8',
-    'default_font'      => 'sarabun',
-    'default_font_size' => '16',
-    'tempDir'           => '/tmp',
- ] );
+    'mode'              => 'UTF-8',
+    'fontDir' => array_merge($fontDirs, [
+        __DIR__ . '/fonts',
+    ]),
+    'fontdata' => $fontData + [
+        'thniramitas' => [
+          'R' => 'THNiramit-AS.ttf',
+          'B' => 'THNiramit-AS-Bold.ttf',
+        ],
+        'thsarabunnew' => [
+          'R' => 'THSarabunNew.ttf',
+          'B' => 'THSarabunNew-Bold.ttf',
+        ]
+    ],
+    'default_font' => $font_db
+]);
+
 
 //กระดาษแนวนอน
 $mpdf->AddPage('L'); 
-
-//ชื่อไฟล์
-$cername = 'เกียรติบัตร '.$namelearn_data.'.pdf';
+$mpdf->adjustFontDescLineheight = 1;
 
 //เริ่มเก็บ HTML
 ob_start(); 
@@ -204,104 +149,66 @@ ob_start();
 <meta charset="UTF-8">
     <!-- Head Website-->
     <title>ระบบพิมพ์เกียรติบัตรออนไลน์ | <?php echo $nameschool_data ?> </title>
-    <link href="css/print.css" rel="stylesheet">
-    
+    <link rel="icon" href="img/fav.ico" type="image/x-icon"/>
+    <style>
+      h1,h2,h3,h4,h5,h6{
+        margin : 0 !important;
+        padding : 0 !important;
+      }
+    </style>
 </head>
 <body>
+
+<?php
+//รับ Data Form DB User
+if(isset($_GET['id'])){
+  $idpj = mysqli_real_escape_string($con, $_GET['id']);
+  $sql_pj = "SELECT * FROM `project` WHERE `id` = '$idpj' ";
+  $result_pj  = mysqli_query($con,$sql_pj); 
+}
+  if (false === $result_pj) {
+      die(mysqli_error($con));
+  }
+
+while ($row_pj = mysqli_fetch_assoc($result_pj)) {
+
+//รับ Data Form DB User
+if(isset($_GET['learn'])){
+    $idlearn = mysqli_real_escape_string($con, $_GET['learn']);
+    $sql_learn = "SELECT * FROM `user` WHERE `id` = '$idlearn' ";
+    $result_learn  = mysqli_query($con,$sql_learn); 
+}
+    if (false === $result_learn) {
+        die(mysqli_error($con));
+    }
+
+        while ($row_learn = mysqli_fetch_assoc($result_learn)) {
+?>
 
 <table>
   <tr>
     <td > <barcode class="bg-qrcode" code="<?=$qr?>" type="QR" size="0.5" error="M" disableborder = "1"> </barcode> </td>
-    <td> <?php echo $idcerthai ; ?> </td>
+    <td style="font-size: 20px"> <?php echo thainumDigit($row_learn['idcer']); ?> </td>
   </tr>
 </table>
 
+<div style="margin-top: <?=$row_pj['margin']?>; text-align: center;">
+<h1 style="font-size: <?=$row_pj['size_name']?>px; color: <?=$row_pj['color']?>;"><?=$row_learn['name']?><h1>
+
+<?php if($row_pj['type'] == 1 && $row_learn['line2'] != ''){?>
+<h2 style="font-size: <?=$row_pj['size_line2']?>px; color: <?=$row_pj['color']?>;"><?=$row_learn['line2']?><h2>
+<?php }elseif($row_pj['type'] == 2){?>
+<h2 style="font-size: <?=$row_pj['size_line2']?>px; color: <?=$row_pj['color']?>;"><?=$row_learn['line2']?><h2>
+<h2 style="font-size: <?=$row_pj['size_line3']?>px; color: <?=$row_pj['color']?>;"><?=$row_learn['line3']?><h2>  
+<?php } ?>
+</div>
 
 
 
-
-
-    <?php
-    // ถ้า Type = 0
-    if($type_data == 0){
-    echo '<div class="name-0">
-    <b> '.$namelearn_data.' </b>
-    </div>';
-    }
-
-    // ถ้า Type = 1
-    if($type_data == 1){
-
-        if(!empty($line2learn_data)){
-        echo'
-        <div class="name-1">
-        <b> '.$namelearn_data.' </b>
-        </div>
-
-        <div class="line2-1">
-        <b> '.$line2learn_data.' </b>
-        </div>';
-        }
-
-        else{
-        echo '<div class="name-0">
-        <b> '.$namelearn_data.' </b>
-        </div>';
-        }
-
-    }
-
-
-    // ถ้า Type = 2
-    if($type_data == 2){
-        if(!empty($line2learn_data) && !empty($line3learn_data) ){
-            echo'
-            <div class="name-2">
-            <b> '.$namelearn_data.' </b>
-            </div>
-        
-            <div class="line2-2">
-            <b> '.$line2learn_data.' </b>
-            </div>
-
-            <div class="line3-2">
-            <b> '.$line3learn_data.' </b>
-            </div>';
-        }
-        
-        elseif(!empty($line2learn_data) ){
-            echo'
-            <div class="name-1">
-            <b> '.$namelearn_data.' </b>
-            </div>
-        
-            <div class="line2-1">
-            <b> '.$line2learn_data.' </b>
-            </div>
-            ';
-        }    
-
-        elseif(!empty($line3learn_data) ){
-            echo'
-            <div class="name-1">
-            <b> '.$namelearn_data.' </b>
-            </div>
-        
-            <div class="line2-1">
-            <b> '.$line3learn_data.' </b>
-            </div>
-            ';
-        }  
-
-        else{
-        echo '<div class="name-0">
-        <b> '.$namelearn_data.' </b>
-        </div>';
-        }
-        
-    }
-    ?>
-
+<?php 
+// ประกาศชื่อไฟล์
+$cername = "เกียรติบัตร ". $row_learn['name']." (".$row_learn['idcer'].").pdf";
+} } ?>
 </body>
 </html>
 
@@ -317,4 +224,5 @@ $mpdf->SetDefaultBodyCSS('background-image-resize', 6);
 $mpdf->WriteHTML($html);
 $mpdf->Output($cername, 'I');
 ob_end_flush();
+exit;
 ?>

@@ -7,9 +7,35 @@ $primaryKey = 'id';
 $columns = array(
 	array( 'db' => 'id', 'dt' => 0 ),
     array( 'db' => 'name',   'dt' => 1 ),
-	array( 'db' => 'username',  'dt' => 2 ),
-	array( 'db' => 'dp',   'dt' => 3 ),
-    array( 'db' => 'shortdp',   'dt' => 4 ),
+    array( 'db' => 'username',   'dt' => 2 ),
+    array(
+        'db'        => 'iddp',
+        'dt'        => 3,
+        'formatter' => function( $d, $row ) {
+            require('../../connect.php');
+            $sql = "SELECT * FROM dp WHERE id = '$d' ";
+            $res = mysqli_query($con, $sql);
+            while ($row = mysqli_fetch_assoc($res)) {
+                $name = $row['name'];
+                break;
+            }
+            return $name;
+        }
+    ),
+    array(
+        'db'        => 'iddp',
+        'dt'        => 4,
+        'formatter' => function( $d, $row ) {
+            require('../../connect.php');
+            $sql = "SELECT * FROM dp WHERE id = '$d' ";
+            $res = mysqli_query($con, $sql);
+            while ($row = mysqli_fetch_assoc($res)) {
+                $shortdp = $row['shortdp'];
+                break;
+            }
+            return $shortdp;
+        }
+    ),
     array(
         'db'        => 'id',
         'dt'        => 5,

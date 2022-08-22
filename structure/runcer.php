@@ -7,16 +7,16 @@ $result_shortnameschool = mysqli_query($con,$sql_shortnameschool);
                break;
 }
 
-//รับชื่อกลุ่มสาระ
-$sql_ckdp = "SELECT `dp` FROM `project` WHERE id = '$id'";
+//รับรหัสกลุ่มสาระ
+$sql_ckdp = "SELECT `iddp` FROM `project` WHERE id = '$id'";
 $result_ckdp = mysqli_query($con,$sql_ckdp); 
     while ($row_ckdp = mysqli_fetch_assoc($result_ckdp)) {
-               $ckdp_data = $row_ckdp['dp'];
+               $ckdp_data = $row_ckdp['iddp'];
                break;
 }
 
 //รับรหัสย่อกลุ่มสาระ
-$sql_cksdp = "SELECT `shortdp` FROM `admin` WHERE dp = '$ckdp_data'";
+$sql_cksdp = "SELECT `shortdp` FROM `dp` WHERE id = '$ckdp_data'";
 $result_cksdp = mysqli_query($con,$sql_cksdp); 
     while ($row_cksdp = mysqli_fetch_assoc($result_cksdp)) {
                $cksdp_data = $row_cksdp['shortdp'];

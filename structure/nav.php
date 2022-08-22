@@ -16,13 +16,26 @@
 					break;
 		}
 
+	//รับ iddp
+	$sql_iddp = "SELECT `iddp` FROM `admin` WHERE `username` = '$username' ";
+	$result_iddp  = mysqli_query($con,$sql_iddp ); 
+	
+		if (false === $result_iddp) {
+		die(mysqli_error($con));
+		}
+
+		while ($row_iddp = mysqli_fetch_assoc($result_iddp)) {
+			$iddp_data = $row_iddp['iddp'];
+				break;
+	}
+
 	//รับ shortdp
-	$sql_sdp = "SELECT `shortdp` FROM `admin` WHERE `username` = '$username' ";
+	$sql_sdp = "SELECT `shortdp` FROM `dp` WHERE `id` = '$iddp_data' ";
 	$result_sdp  = mysqli_query($con,$sql_sdp ); 
 	
 		if (false === $result_sdp) {
 		die(mysqli_error($con));
-		}
+		}	
 	
 			while ($row_sdp = mysqli_fetch_assoc($result_sdp)) {
 				$sdp_data = $row_sdp['shortdp'];

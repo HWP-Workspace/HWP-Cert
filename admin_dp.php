@@ -68,13 +68,13 @@ if($_SESSION['username'] !== "admin"){
 											</li>
 
                       <li>
-												<a href="admin_dp.php">
+												<a href="">
 													<span class="sub-item">ตั้งค่ากลุ่ม/งาน</span>
 												</a>
 											</li>
 
 											<li>
-												<a href="">
+												<a href="admin_user.php">
 													<span class="sub-item">ตั้งค่าผู้ดูแลระบบ</span>
 												</a>
 											</li>
@@ -122,22 +122,22 @@ if($_SESSION['username'] !== "admin"){
 				<div class="page-inner mt--5">
 
 					<div class="card">
-						<h2 class="card-header"> <b>ตั้งค่าผู้ดูแลระบบ</b>
-                        <div class="float-right text-white">
-                        <button class="btn btn-sm bg-primary text-white" data-toggle="modal" data-target="#AddUser" >  <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
-                         </div>
-                         </h2>
+						<h2 class="card-header"> <b>ตั้งค่ากลุ่ม/งาน</b>
+            <div class="float-right text-white">
+             <button class="btn btn-sm bg-primary text-white" data-toggle="modal" data-target="#AddDP" >  <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
+              </div>
+              </h2>
 						<div class="card-body">
 
 
-							<table id="loaduser" class="table nowrap" style="width:100%">
+							<table id="loaddp" class="table nowrap" style="width:100%">
 									<thead class="table-light">
 										<tr>
 											<th>ลำดับที่</th>
-											<th>ชื่อ-นามสกุล</th>
-                                            <th>ชื่อผู้ใช้</th>
-											<th>กลุ่ม/งาน</th>
-											<th>ชื่อย่อ</th>
+											<th>ชื่อกลุ่มงาน</th>
+                      <th>ชื่อย่อกลุ่มงาน</th>
+                      <th>จำนวนผู้ดูแลระบบ</th>
+											<th>จำนวนโครงการ</th>
 											<th>ดำเนินการ</th>
 										</tr>
 									</thead>
@@ -145,10 +145,10 @@ if($_SESSION['username'] !== "admin"){
 										<tr>
 											<td> </td>
 											<td> </td>
+                      <td> </td>
 											<td> </td>
 											<td> </td>
-											<td> </td>
-                                            <td> </td>
+                      <td> </td>
 										</tr>
 									</tbody>
 							</table>
@@ -190,57 +190,30 @@ if($_SESSION['username'] !== "admin"){
 
 <!-- Script-->
 <?php require('structure/script.php'); ?>
-<?php
- $sql_dp = "SELECT * FROM `dp`";
- $query_dp = mysqli_query($con, $sql_dp);
- if (false === $query_dp) {
-     die(mysqli_error($con));
- }
-?>
 
- <!-- Modal Add User -->
- <div class="modal fade" id="AddUser" tabindex="-1">
+
+ <!-- Modal Add DP -->
+ <div class="modal fade" id="AddDP" tabindex="-1">
     <div class="modal-dialog ">
       <div class="modal-content ">
         <div class="modal-header">
-          <h3> เพิ่มผู้ดูแลระบบ </h3> 
+          <h3> เพิ่มกลุ่ม/งาน</h3> 
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             	</button>
         </div>
         <div class="modal-body">
 
-              <form action="sql/admin/adduser.php" method="post">
-                <div class="mb-3">
-                    <label class="form-label" for="username">ชื่อผู้ใช้</label>
-                    <input class="form-control" type="text" name="username"  placeholder="ชื่อผู้ใช้" minlength="5" required>
-                    <div class="form-text">ชื่อผู้ใช้ไม่สามารถซ้ำกันได้</div>
-                </div>
-
-                <div class="mb-3">
-                      <label for="password" class="form-label">รหัสผ่าน</label>
-                      <input type="password" class="form-control" name="password_1" placeholder="รหัสผ่าน" minlength="8" required> 
-                      <div class="form-text"></div>
-                  </div>
+              <form action="sql/admin/adddp.php" method="post">
                   <div class="mb-3">
-                      <label for="password" class="form-label">ยีนยันรหัสผ่าน</label>
-                      <input type="password" class="form-control" name="password_2" placeholder="ยีนยันรหัสผ่าน" minlength="8" required>
-                      <div class="form-text"></div>
+                      <label for="name" class="form-label">ชื่อกลุ่ม/งาน</label>
+                      <input type="text" class="form-control" name="name" placeholder="ชื่อกลุ่ม/งาน" required>
                   </div>
 
                   <div class="mb-3">
-                      <label for="name" class="form-label">ชื่อผู้ดูแล</label>
-                      <input type="text" class="form-control" name="name" placeholder="ชื่อผู้ดูแล" required>
-                  </div>
-                  
-                  <div class="mb-3">
-                      <label for="iddp" class="form-label">กลุ่ม/งาน</label>
-                      <select name="iddp" id="iddp" class="form-control">	
-                      <option value=""  selected value="">กรุณาเลือกกลุ่ม/งาน</option>
-                        <?php foreach ($query_dp as $value_dp) { ?>
-                        	<option value="<?=$value_dp['id']?>"><?=$value_dp['name']?></option>
-                        <?php } ?>
-                      </select>	
+                      <label for="shortdp" class="form-label">ชื่อย่อกลุ่ม/งาน</label>
+                      <input type="text" class="form-control" name="shortdp" placeholder="ชื่อย่อกลุ่ม/งาน" required>
+								      <small class="form-text text-muted text-danger">ข้อมูลนี้นำไปใช้รันเกียรติบัตร</small>		
                   </div>
 
                 <div class="text-center">
@@ -255,11 +228,11 @@ if($_SESSION['username'] !== "admin"){
 
 
 <!-- Modal Delete -->
-<div class="modal fade" id="DeleteUser" tabindex="-1">
+<div class="modal fade" id="DeleteDP" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">คุณกำลังจะลบผู้ใช้งาน ?</h3>
+        <h3 class="modal-title">คุณกำลังจะลบกลุ่ม/งาน ?</h3>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             	</button>
@@ -268,13 +241,13 @@ if($_SESSION['username'] !== "admin"){
           <form>
             <i class="mt-2 mb-2 fas fa-exclamation-circle fa-8x text-danger"></i>
 
-            <h3 class="mt-3">คุณแน่ใจไหมที่จะลบผู้ใช้งาน</h3>
-            <h4 class="mt-1">หากกลบแล้วผู้ใช้งานจะไม่สามารถเข้าสู่ระบบได้</h4>
+            <h3 class="mt-3">คุณแน่ใจไหมที่จะกลุ่ม/งาน</h3>
+            <h4 class="mt-1">หากกลบแล้วจะไม่สามารถเพิ่มผู้ใช้เข้าสู่กลุ่ม/งานนี้ได้</h4>
 
           </div>
           <div class="mb-4 mt-3 text-center"> 
           <input type="hidden" id="id-d">
-            <button type="button" onclick="DeleteUser()" class="btn btn-danger"><i class="far fa-trash-alt"></i> ลบ</button>
+            <button type="button" onclick="DeleteDP()" class="btn btn-danger"><i class="far fa-trash-alt"></i> ลบ</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i>  ยกเลิก</button>
             </form>
       </div>
@@ -283,48 +256,32 @@ if($_SESSION['username'] !== "admin"){
 </div>
 
 
-  <!-- Modal Edit Project-->
-  <div class="modal fade" id="EditUser" tabindex="-1">
+  <!-- Modal Edit DP-->
+  <div class="modal fade" id="EditDP" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h3>แก้ไขข้อมูลผู้ดูแลระบบ</h3>
+                <h3>แก้ไขข้อมูลกลุ่ม/งาน</h3>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             	</button>
               </div>
               <div class="modal-body">
                 <form>
-                  <div class="mb-3">
-                      <label for="name" class="form-label">ชื่อผู้ใช้</label>
-                      <input type="text" class="form-control" id="username" disabled>
-                      <div class="form-text">ชื่อผู้ใช้ไม่สามารถซ้ำกันได้</div>
+                <div class="mb-3">
+                      <label for="name" class="form-label">ชื่อกลุ่ม/งาน</label>
+                      <input type="text" class="form-control" name="name" id="name" placeholder="ชื่อกลุ่ม/งาน" required>
                   </div>
 
                   <div class="mb-3">
-                      <label for="name" class="form-label">ชื่อผู้ดูแล</label>
-                      <input type="text" class="form-control" id="name" required>
-                  </div>
-                  
-                  <div class="mb-3">
-                      <label for="iddp-e" class="form-label">กลุ่ม/งาน</label>
-                      <select name="iddp-e" id="iddp-e" class="form-control">	
-                      <option value=""  selected value="">กรุณาเลือกกลุ่ม/งาน</option>
-                        <?php foreach ($query_dp as $value_dp) { ?>
-                        	<option value="<?=$value_dp['id']?>"><?=$value_dp['name']?></option>
-                        <?php } ?>
-                      </select>		
-                  </div>
-
-                  <hr>
-                  <div class="mb-3">
-                      <label for="name" class="form-label">รหัสผ่าน (ถ้าต้องการแก้ไข)</label>
-                      <input type="password" class="form-control" id="password" minlength="8">
+                      <label for="shortdp" class="form-label">ชื่อย่อกลุ่ม/งาน</label>
+                      <input type="text" class="form-control" name="shortdp" id="shortdp" placeholder="ชื่อย่อกลุ่ม/งาน" required>
+								      <small class="form-text text-muted text-danger">ข้อมูลนี้นำไปใช้รันเกียรติบัตร</small>		
                   </div>
 
                   <input type="hidden" id="id">
                   <div class="text-center">
-                <button type="button" onclick="EditUser()" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
+                <button type="button" onclick="EditDP()" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
                 </form>
               </div>
               </div>
@@ -337,10 +294,10 @@ if($_SESSION['username'] !== "admin"){
 <script >
 $(document).ready(function() {
   
-  var table = $('#loaduser').DataTable( {
+  var table = $('#loaddp').DataTable( {
        // "processing": true,
         "serverSide": true,
-        "ajax": "sql/admin/loaduser.php",
+        "ajax": "sql/admin/loaddp.php",
         "language" : {
               "emptyTable": "ไม่มีข้อมูลในตาราง",
               "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
@@ -380,11 +337,11 @@ $(document).ready(function() {
         "order": [[ 0, "asc" ]],
         "columns": [
         { "width": "7%" },
-        { "width": "30%" },
-        { "width": "13%" },
-        { "width": "33%" },
-        { "width": "15%" },
-        { "width": "5%" }
+        { "width": "43%" },
+        { "width": "32%" },
+        { "width": "7%" },
+        { "width": "7%" },
+        { "width": "7%" },
          ],
 
          responsive: true
@@ -438,9 +395,9 @@ $(document).ready(function() {
 <?php }; ?>
 
 
-<!-- Script DataTable - DeleteUser Button -->
+<!-- Script DataTable - DeleteDP Button -->
 <script>
-  $('#DeleteUser').on('shown.bs.modal', function (event) {
+  $('#DeleteDP').on('shown.bs.modal', function (event) {
 
     var button = $(event.relatedTarget);
     var id = button.data('whatever');
@@ -449,27 +406,27 @@ $(document).ready(function() {
     $('#id-d').val(id);
 })
 
-function DeleteUser(){
+function DeleteDP(){
     var id = $('#id-d').val();
 
         $.ajax({
-            url:'sql/admin/deleteuser.php',
+            url:'sql/admin/deletedp.php',
             method: 'POST',
             data: {id:id},
             success:function(data){
-              $('#DeleteUser').modal('toggle');
-			  swal("สำเร็จ!", "ลบข้อมูลผู้เข้าร่วมสำเร็จ [SUCCESS]", {
-				icon : "success",
-				buttons: {
-				confirm: {
-					text: "ตกลง",
-					className : 'btn btn-success'
-				}
-				},
-				}).then(function() {
-				$('#loaduser').DataTable().draw();
+              $('#DeleteDP').modal('toggle');
+              swal("สำเร็จ!", "ลบกลุ่ม/งานสำเร็จ [SUCCESS]", {
+              icon : "success",
+              buttons: {
+              confirm: {
+                text: "ตกลง",
+                className : 'btn btn-success'
+              }
+              },
+              }).then(function() {
+              $('#loaddp').DataTable().draw();
 
-			});
+            });
 
             }
           })
@@ -477,9 +434,9 @@ function DeleteUser(){
 </script>
 
 
-<!-- Script DataTable - EditUser Button -->
+<!-- Script DataTable - EditDP Button -->
 <script>
-$('#EditUser').on('shown.bs.modal', function (event) {
+$('#EditDP').on('shown.bs.modal', function (event) {
 
       var button = $(event.relatedTarget) 
       var id = button.data('whatever') 
@@ -488,42 +445,39 @@ $('#EditUser').on('shown.bs.modal', function (event) {
       $('#id').val(id);
 
       $.ajax({
-          url:'sql/admin/insertuser.php',
+          url:'sql/admin/insertdp.php',
           method: 'POST',
           data: {id:id},
           success:function(data){
             var json = $.parseJSON(data);
-            $("#username").val(json[0].username);
             $("#name").val(json[0].name);
-            $("#iddp-e").val(json[0].iddp);
+            $("#shortdp").val(json[0].shortdp);
           }
         })
 })
 
 
-function EditUser(){
+function EditDP(){
     var id = $('#id').val();
     var name = $('#name').val();
-    var username = $('#username').val();
-    var password = $('#password').val();
-    var iddp = $('#iddp-e').val();
+    var shortdp = $('#shortdp').val();
 
         $.ajax({
-            url:'sql/admin/edituser.php',
+            url:'sql/admin/editdp.php',
             method: 'POST',
-            data: {id:id,username:username,password:password,name:name,iddp:iddp},
+            data: {id:id,name:name,shortdp:shortdp},
             success:function(data){
-			  $('#EditUser').modal('toggle');
-			  swal("สำเร็จ!", "แก้ไขผู้ดูแลระบบสำเร็จ [SUCCESS]", {
-				icon : "success",
-				buttons: {
-				confirm: {
-					text: "ตกลง",
-					className : 'btn btn-success'
-				}
-				},
+          $('#EditDP').modal('toggle');
+          swal("สำเร็จ!", "แก้ไขผู้ดูแลระบบสำเร็จ [SUCCESS]", {
+          icon : "success",
+          buttons: {
+          confirm: {
+            text: "ตกลง",
+            className : 'btn btn-success'
+          }
+          },
 				}).then(function() {
-				$('#loaduser').DataTable().draw();
+				$('#loaddp').DataTable().draw();
 
 			});
 

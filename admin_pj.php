@@ -10,10 +10,43 @@ require('structure/head.php');
 
 if(!isset($_SESSION['username'])){
 	header('location: index.php');
+}else{
+  $username = $_SESSION['username'];
 }
 
 if(!isset($_GET['id'])){
 	header('location: admin.php');
+}
+
+//ดึงกลุ่มสาระจากผู้ใช้งาน
+if(isset($_SESSION['username'])){
+  $sql_dp_user = "SELECT `iddp` FROM `admin` WHERE `username` = '$username' ";
+  $result_dp_user = mysqli_query($con,$sql_dp_user); 
+
+  if (false === $result_dp_user) {
+    die(mysqli_error($con));
+  }
+
+      while ($row_dp_user = mysqli_fetch_assoc($result_dp_user)) {
+                 $dp_user_data = $row_dp_user['iddp'];
+                 break;
+        }
+}
+
+//ดึงกลุ่มสาระจากโปรเจค
+if(isset($_GET['id'])){
+  $id = mysqli_real_escape_string($con, $_GET['id']);
+  $sql_dp_pj = "SELECT `iddp` FROM `project` WHERE `id` = '$id' ";
+  $result_dp_pj = mysqli_query($con,$sql_dp_pj); 
+
+  if (false === $result_dp_pj) {
+    die(mysqli_error($con));
+  }
+
+      while ($row_dp_pj = mysqli_fetch_assoc($result_dp_pj)) {
+                 $dp_pj_data = $row_dp_pj['iddp'];
+                 break;
+        }
 }
 
 //รับชื่อโครงการ
@@ -76,6 +109,14 @@ if(isset($_GET['id'])){
 			 break;
   }
 }
+
+
+
+if($namepj_data == '' || $namepj_data == null){ // เช็คค่าว่างหากไอดีไม่ถูกต้อง
+  header('location: admin.php');
+}elseif($dp_pj_data != $dp_user_data && $dp_user_data != '1'){ // เช็คหากโครงการ ไม่ตรงกับ ผู้ใช้งาน
+  header('location: admin.php');
+}
 ?>
 
 </head>
@@ -91,12 +132,11 @@ if(isset($_GET['id'])){
 						<div class="sidebar-content">
 
 						<ul class="nav nav-secondary">
-								<li class="nav-item active">
-									<a href="admin.php">
-										<i class="fas fa-arrow-left"></i>
-										<p>กลับไปหน้าแรก</p>
+								<li class="nav-item">
+									<a href="index.php">
+										<i class="fas fa-home"></i>
+										<p>หน้าแรก</p>
 									</a>
-
 								</li>
 								<li class="nav-section">
 									<span class="sidebar-mini-icon">
@@ -105,7 +145,14 @@ if(isset($_GET['id'])){
 									<h4 class="text-section">แถบเมนู</h4>
 								</li>
 
-               					 <li class="nav-item">
+								<li class="nav-item active">
+									<a href="admin.php">
+										<i class="fas fa-arrow-left"></i>
+										<p>ย้อนกลับ</p>
+									</a>
+								</li>
+								<?php if($_SESSION['username'] == "admin"){ ?>
+                  <li class="nav-item">
 									<a data-toggle="collapse" href="#base">
 									<i class="fas fa-cog"></i>
 										<p>ตั้งค่าระบบ</p>
@@ -119,17 +166,24 @@ if(isset($_GET['id'])){
 												</a>
 											</li>
 
-											<li>
-												<a href="admin_user.php">
-													<span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+                      <li>
+												<a href="admin_dp.php">
+													<span class="sub-item">ตั้งค่ากลุ่ม/งาน</span>
 												</a>
 											</li>
+
+											<li>
+												<a href="admin_user.php">
+													<span class="sub-item">ตั้งค่าผู้ดูแลระบบ</span>
+												</a>
+											</li>
+          
 
 											</li>
 										</ul>
 									</div>
 								</li>
-
+                <?php } ?>
 
                					 <li class="nav-item">
 									<a href="admin_tempate.php" >
@@ -166,8 +220,91 @@ if(isset($_GET['id'])){
 				</div>
 				<div class="page-inner mt--5">
 
+
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+              <h2><b>โครงการ : <?=$namepj_data?></b></h2>
+            </div>
+          </div>
+    </div>
+
+      <div class="col-xl-4 col-12">
+          <div class="card">
+						<h3 class="card-header"> <b>ตั้งค่ารูปแบบโครงการ</b></h3>
+						<div class="card-body">
+
+            <?php
+            $sql = "SELECT * FROM project WHERE id = '$id'";
+            $result = mysqli_query($con, $sql);
+
+            if (false === $result) {
+              die(mysqli_error($con));
+            }
+
+            while($row = mysqli_fetch_assoc($result)){
+            $color_sql = $row['color'];
+            ?>
+
+              <div class="form-group mb-3">
+                <label for="font">ฟอนต์</label>
+                <select class="form-control" id="font" name="font" required>
+                  <option <?php echo $row['font'] == 'thniramitas' ? ' selected ' : '';?> value="thniramitas">TH Niramit AS</option>
+                  <option <?php echo $row['font'] == 'thsarabunnew' ? ' selected ' : '';?> value="thsarabunnew">TH Sarabun New (ค่าเริ่มต้น)</option>
+                </select>
+              </div>
+
+              <div class="form-group range-wrap mb-5">
+                <label for="margin">ระยะขอบ <small class="text-danger">[px]</small></label>
+                <input type="range" class="form-control-range range" value="<?=$row['margin']?>" min="0" max="1000" name="margin" id="margin" required>
+                <output class="bubble"></output>
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="color">สีฟอนต์</label>
+                <input type="text" class="form-control" name="color" id="color" required>
+              </div>
+
+              <div class="form-group range-wrap mb-5">
+                <label for="size_name">ขนาดฟอนต์ (บรรทัดที่ 1) <small class="text-danger">[px]</small></label>
+                <input type="range" class="form-control-range range" value="<?=$row['size_name']?>" min="0" max="144" name="size_name" id="size_name" required>
+                <output class="bubble"></output>
+              </div>
+
+              <?php if($type_data == 1){ ?>
+              <div class="form-group range-wrap mb-5">
+                <label for="size_line2">ขนาดฟอนต์ (บรรทัดที่ 2) <small class="text-danger">[px]</small></label>
+                <input type="range" class="form-control-range range" value="<?=$row['size_line2']?>" min="0" max="144" name="size_line2" id="size_line2" required>
+                <output class="bubble"></output>
+              </div>
+              <?php } if($type_data == 2){?>
+                <div class="form-group range-wrap mb-5">
+                <label for="size_line2">ขนาดฟอนต์ (บรรทัดที่ 2) <small class="text-danger">[px]</small></label>
+                <input type="range" class="form-control-range range" value="<?=$row['size_line2']?>" min="0" max="144" name="size_line2" id="size_line2" required>
+                <output class="bubble"></output>
+              </div>
+              <div class="form-group range-wrap mb-5">
+                <label for="size_line3">ขนาดฟอนต์ (บรรทัดที่ 3) <small class="text-danger">[px]</small></label>
+                <input type="range" class="form-control-range range" value="<?=$row['size_line3']?>" min="0" max="144" name="size_line3" id="size_line3" required>
+                <output class="bubble"></output>
+              </div>
+                <?php } ?>
+              <div class="text-center">
+                <button class="btn btn-primary btn-sm" type="button" onclick="EditCer()"> <i class="fas fa-save"></i> บันทึก</button>
+              </div>
+
+              <?php } ?>
+
+
+						</div>
+					</div>
+        </div>
+
+      <div class="col-xl-8 col-12">
 					<div class="card">
-						<h3 class="card-header"> <b>ตั้งค่าโครงการ : <?=$namepj_data?></b>
+						<h3 class="card-header"> <b>ตั้งค่าโครงการ</b>
                         <div class="float-right text-white mt-3 mt-md-0">
             <button class="btn btn-sm bg-primary text-white" data-toggle="modal" data-target="#AddL" >  <i class="fas fa-plus pe-1"></i> เพิ่ม</dutton> 
 						<button class="btn btn-sm bg-info text-white ml-2" data-toggle="modal" data-target="#AddUP" >  <i class="fas fa-file-upload"></i> อัปโหลด</dutton>	
@@ -182,8 +319,6 @@ if(isset($_GET['id'])){
                          </div>
                          </h3>
 						<div class="card-body">
-
-
 							<table id="loadlearn" class="table nowrap" style="width:100%">
 									<thead class="table-light">
 										<tr>
@@ -202,19 +337,14 @@ if(isset($_GET['id'])){
 										</tr>
 									</tbody>
 							</table>
-
-							
-
-
 						</div>
-					
 					</div>
 
+          
 
 
-
-
-
+      </div>	
+		</div>
 
 
 
@@ -283,7 +413,7 @@ if(isset($_GET['id'])){
                   ?>
                 <input type="hidden" name="id" value="<?=$_GET['id']?>" > 
                 <div class="text-center">
-                    <button class="btn btn-primary" type="submit" name="submit" class="btn"> <i class="fas fa-save"></i> บันทึก</button>
+                    <button class="btn btn-primary" type="submit" name="submit" > <i class="fas fa-save"></i> บันทึก</button>
                 </div> 
             </form>
 
@@ -378,7 +508,7 @@ if(isset($_GET['id'])){
 
                  <input type="hidden" name="id" value="<?=$_GET['id']?>"> 
                 <div class="text-center mt-3">
-                    <button class="btn btn-primary" type="submit" name="import" class="btn"> <i class="fas fa-file-import"></i> นำเข้า</button>
+                    <button class="btn btn-primary" type="submit" id="import" name="import" > <i class="fas fa-file-import"></i> นำเข้า</button>
                 </div> 
             </form>
           </div>
@@ -400,11 +530,10 @@ if(isset($_GET['id'])){
           </div>
           <div class="modal-body">
 
-                <form action="sql/admin/uptempate.php" method="post" enctype="multipart/form-data">
-
+        <form action="sql/admin/uptempate.php" method="post" enctype="multipart/form-data">
 				<div class="mb-3">
-                    <label class="form-label" for="name">กรุณาอัปโหลดไฟล์เทมเพลต .jpg, .jpeg, .png เท่านั้น</label>
-                    <div class="input-group mb-3">
+          <label class="form-label" for="name">กรุณาอัปโหลดไฟล์เทมเพลต .jpg, .jpeg, .png เท่านั้น</label>
+          <div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<span class="input-group-text">อัปโหลด</span>
 					</div>
@@ -424,7 +553,7 @@ if(isset($_GET['id'])){
 
                   <input type="hidden" name="id" value="<?=$_GET['id']?>" > 
                   <div class="text-center mt-3">
-                      <button class="btn btn-primary" type="submit" name="submit" class="btn"> <i class="fas fa-file-import"></i> นำเข้า</button>
+                      <button class="btn btn-primary" type="submit" name="submit" > <i class="fas fa-file-import"></i> นำเข้า</button>
                   </div> 
               </form>
 
@@ -678,3 +807,69 @@ function DeleteLearn(){
   }
 </script>
 
+
+<script>
+$('#color').colorpicker({ 
+    inline: false,
+    container: true,
+    format: 'hex'
+});
+$("#color").val('<?=$color_sql?>');
+$("#color").trigger('change');
+
+</script>
+
+<script>
+function EditCer (){
+    var id = '<?=$_GET['id']?>';
+    var font = $('#font').val();
+    var margin = $('#margin').val();
+    var color = $('#color').val();
+    var size_name = $('#size_name').val();
+    var size_line2 = $('#size_line2').val()
+    var size_line3 = $('#size_line3').val();
+
+  $.ajax({
+   url:'sql/admin/editcer.php',
+   method: 'POST',
+   data: {id:id,font:font,margin:margin,color:color,size_name:size_name,size_line2:size_line2,size_line3:size_line3},
+   success:function(data){
+   swal("สำเร็จ!", "แก้ไขรูปแบบโครงการสำเร็จ [SUCCESS]", {
+   icon : "success",
+   buttons: {
+     confirm: {
+       text: "ตกลง",
+       className : 'btn btn-success'}
+   }
+  });
+  }
+ })
+}
+</script>
+
+<script>
+$(document).ready(function() {
+const allRanges = document.querySelectorAll(".range-wrap");
+  allRanges.forEach(wrap => {
+  const range = wrap.querySelector(".range");
+  const bubble = wrap.querySelector(".bubble");
+
+  range.addEventListener("input", () => {
+    setBubble(range, bubble);
+  });
+  setBubble(range, bubble);
+});
+
+function setBubble(range, bubble) {
+  const val = range.value;
+  const min = range.min ? range.min : 0;
+  const max = range.max ? range.max : 100;
+  const newVal = Number(((val - min) * 100) / (max - min));
+  bubble.innerHTML = val;
+
+  // Sorta magic numbers based on size of the native UI thumb
+  bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+}
+
+})
+</script>

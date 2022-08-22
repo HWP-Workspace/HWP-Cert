@@ -37,3 +37,8 @@ require('connect.php');
 	<!-- CSS DT -->
 	<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
+
+	<!-- BS Color -->
+	<link rel="stylesheet" href="css/bootstrap-colorpicker.min.css">
+
+	

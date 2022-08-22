@@ -7,8 +7,7 @@
         $password_1 = mysqli_real_escape_string($con, $_POST['password_1']);
         $password_2 = mysqli_real_escape_string($con, $_POST['password_2']);
         $name = mysqli_real_escape_string($con, $_POST['name']);
-        $dp = mysqli_real_escape_string($con, $_POST['dp']);
-        $shortdp = mysqli_real_escape_string($con, $_POST['shortdp']);
+        $iddp = mysqli_real_escape_string($con, $_POST['iddp']);
         
         $user_check_query = "SELECT `username` FROM `admin` WHERE `username` = '$username' ";
         $result1 = mysqli_query($con, $user_check_query) or die(mysqli_error());
@@ -29,7 +28,7 @@
         else {
             $password = md5($password_1);
 
-            $sql = "INSERT INTO `admin` (`username`, `password`, `name`, `dp`, `shortdp`) VALUES ('$username', '$password', '$name', '$dp', '$shortdp')";
+            $sql = "INSERT INTO `admin` (`username`, `password`, `name`, `iddp`) VALUES ('$username', '$password', '$name', '$iddp')";
             $res = mysqli_query($con, $sql);
             if (false === $res) {
                 die(mysqli_error($con));

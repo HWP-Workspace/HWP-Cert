@@ -93,12 +93,6 @@ class FontVariables
 			 */
 
 			'fontdata' => [
-				"saraban" => [
-					'R' => "THSarabunNew.ttf",
-					'B' => "THSarabunNew-Bold.ttf",
-					'useOTL' => 0x00,
-					'useKashida' => 75,
-				],
 				"dejavusanscondensed" => [
 					'R' => "DejaVuSansCondensed.ttf",
 					'B' => "DejaVuSansCondensed-Bold.ttf",

@@ -62,9 +62,15 @@ if(!isset($_SESSION['username'])){
 												</a>
 											</li>
 
+                      <li>
+												<a href="admin_dp.php">
+													<span class="sub-item">ตั้งค่ากลุ่ม/งาน</span>
+												</a>
+											</li>
+
 											<li>
 												<a href="admin_user.php">
-													<span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+													<span class="sub-item">ตั้งค่าผู้ดูแลระบบ</span>
 												</a>
 											</li>
 
@@ -182,6 +188,7 @@ if(!isset($_SESSION['username'])){
 									<thead class="table-light">
 										<tr>
 											<th>ลำดับที่</th>
+                      <th>สถานะ</th>
 											<th>โครงการ</th>
 											<th>กลุ่ม/งาน</th>
 											<th>วันที่</th>
@@ -191,6 +198,7 @@ if(!isset($_SESSION['username'])){
 									<tbody>
 										<tr>
 											<td> </td>
+                      <td> </td>
 											<td> </td>
 											<td> </td>
 											<td> </td>
@@ -202,21 +210,7 @@ if(!isset($_SESSION['username'])){
 
 
 						</div>
-					
 					</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -270,6 +264,24 @@ if(!isset($_SESSION['username'])){
                       <option value="2">ชื่อ-นามสกุล และเพิ่มอีก 2 บรรทัด</option>
                     </select>
                   </div>
+
+                  <?php if($_SESSION['username'] == "admin"){
+                     $sql_dp = "SELECT * FROM `dp`";
+                     $query_dp = mysqli_query($con, $sql_dp);
+                     if (false === $query_dp) {
+                         die(mysqli_error($con));
+                     }
+                  ?>
+                  <div class="mb-3">
+                      <label for="iddp" class="form-label">กลุ่ม/งาน</label>
+                      <select name="iddp" id="iddp" class="form-control">	
+                      <option value=""  selected value="">กรุณาเลือกกลุ่ม/งาน</option>
+                        <?php foreach ($query_dp as $value_dp) { ?>
+                        	<option <?php echo $value_dp['id'] == '1' ? ' selected ' : '';?> value="<?=$value_dp['id']?>"><?=$value_dp['name']?></option>
+                        <?php } ?>
+                      </select>	
+                  </div>
+                  <?php } ?>
 
                 <div class="text-center">
                     <button class="btn btn-primary" type="submit" name="submit" class="btn"> <i class="fas fa-save"></i> บันทึก</button>
@@ -350,6 +362,24 @@ if(!isset($_SESSION['username'])){
                     </select>
                   </div>
 
+                  <?php if($_SESSION['username'] == "admin"){
+                     $sql_dp = "SELECT * FROM `dp`";
+                     $query_dp = mysqli_query($con, $sql_dp);
+                     if (false === $query_dp) {
+                         die(mysqli_error($con));
+                     }
+                  ?>
+                  <div class="mb-3">
+                      <label for="iddp_e" class="form-label">กลุ่ม/งาน</label>
+                      <select name="iddp_e" id="iddp_e" class="form-control">	
+                      <option value=""  selected value="">กรุณาเลือกกลุ่ม/งาน</option>
+                        <?php foreach ($query_dp as $value_dp) { ?>
+                        	<option value="<?=$value_dp['id']?>"><?=$value_dp['name']?></option>
+                        <?php } ?>
+                      </select>	
+                  </div>
+                  <?php } ?>
+
                   <input type="hidden" id="id-e">
                   <div class="text-center">
                 <button type="button" onclick="EditPj()" class="btn btn-primary"> <i class="fas fa-save"></i> แก้ไข</button>
@@ -413,22 +443,6 @@ if(!isset($_SESSION['username'])){
     </div>
   </div> 
 
-
-<?php
-//รับ dp
-	$sql_dp = "SELECT `dp` FROM `admin` WHERE `username` = '$username' ";
-	$result_dp  = mysqli_query($con,$sql_dp ); 
-	
-		if (false === $result_dp) {
-		die(mysqli_error($con));
-		}
-	
-			while ($row_dp = mysqli_fetch_assoc($result_dp)) {
-				$dp_data = $row_dp['dp'];
-					break;
-		}
-?>
-
 <script>	
 $(document).ready(function () {
 setInterval(function(){
@@ -475,7 +489,7 @@ $(document).ready(function() {
   var table = $('#loadproject').DataTable( {
         //"processing": true,
         "serverSide": true,
-        "ajax": "sql/admin/loadproject.php?dp=<?=$dp_data?>",
+        "ajax": "sql/admin/loadproject.php?iddp=<?=$iddp_data?>",
         "language" : {
               "emptyTable": "ไม่มีข้อมูลในตาราง",
               "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
@@ -515,8 +529,9 @@ $(document).ready(function() {
         "order": [[ 0, "desc" ]],
         "columns": [
         { "width": "7%" },
-        { "width": "40%" },
-        { "width": "33%" },
+        { "width": "5%" },
+        { "width": "35%" },
+        { "width": "30%" },
         { "width": "15%" },
         { "width": "5%" }
          ],
@@ -603,6 +618,7 @@ function DeletePj(){
           $("#name").val(json[0].name);
           $("#date").val(json[0].date);
           $("#type").val(json[0].type);
+          $("#iddp_e").val(json[0].iddp);
         }
       })
 })
@@ -612,10 +628,15 @@ function EditPj(){
     var name = $('#name').val();
     var date = $('#date').val();
     var type = $('#type').val();
+    if($('#iddp_e').val() != ''){
+    var iddp_e = $('#iddp_e').val();
+    }else{
+      var iddp_e = '';
+    }
         $.ajax({
             url:'sql/admin/editproject.php',
             method: 'POST',
-            data: {id:id,name:name,date:date,type:type},
+            data: {id:id,name:name,date:date,type:type,iddp:iddp_e},
             success:function(data){
             $('#EditPj').modal('toggle');
             swal("สำเร็จ!", "แก้ไขโครงการ/กิจกรรมสำเร็จ [SUCCESS]", {

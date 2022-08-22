@@ -61,8 +61,14 @@ require('structure/head.php');
 											</li>
 
 											<li>
+												<a href="admin_dp.php">
+													<span class="sub-item">ตั้งค่ากลุ่ม/งาน</span>
+												</a>
+											</li>
+
+											<li>
 												<a href="admin_user.php">
-													<span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+													<span class="sub-item">ตั้งค่าผู้ดูแลระบบ</span>
 												</a>
 											</li>
           

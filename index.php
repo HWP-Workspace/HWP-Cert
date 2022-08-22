@@ -14,8 +14,8 @@ if(isset($_GET["s"])){
     $strKeyword = $_GET["s"];
 }
 
-    if(!empty($_GET['dp'])){
-        $valdp = $_GET['dp'];
+    if(!empty($_GET['iddp'])){
+        $valdp = $_GET['iddp'];
     }else{
         $valdp = '';
     }
@@ -26,7 +26,6 @@ if(isset($_GET["s"])){
     }
     
 ?>
- <?php header("Cache-Control: public, max-age=60, s-maxage=60");?> 
 </head>
 <body>
 
@@ -77,9 +76,15 @@ if(isset($_GET["s"])){
 												</a>
 											</li>
 
+                                            <li>
+												<a href="admin_dp.php">
+													<span class="sub-item">ตั้งค่ากลุ่ม/งาน</span>
+												</a>
+											</li>
+
 											<li>
 												<a href="admin_user.php">
-													<span class="sub-item">รายชื่อผู้ดูแลระบบ</span>
+													<span class="sub-item">ตั้งค่าผู้ดูแลระบบ</span>
 												</a>
 											</li>
 
@@ -147,7 +152,7 @@ if(isset($_GET["s"])){
                         </div>
 
                         <?php
-                        $sql_dp = "SELECT DISTINCT `dp` FROM `admin`";
+                        $sql_dp = "SELECT * FROM `dp`";
                         $query_dp = mysqli_query($con, $sql_dp);
                         if (false === $query_dp) {
                             die(mysqli_error($con));
@@ -157,10 +162,10 @@ if(isset($_GET["s"])){
 
                     
                         <div class="col-xl-2 col-6 mt-2 mt-xl-0">
-                            <select class="form-control" id="dp" name="dp">
+                            <select class="form-control" id="iddp" name="iddp">
                             <option value=""  selected value="">กรุณาเลือกกลุ่ม/งาน</option>
                                 <?php foreach ($query_dp as $value_dp) { ?>
-                                	<option <?php echo $value_dp['dp'] == $valdp ? ' selected ' : '';?> value="<?=$value_dp['dp']?>"><?=$value_dp['dp']?></option>
+                                	<option <?php echo $value_dp['id'] == $valdp ? ' selected ' : '';?> value="<?=$value_dp['id']?>"><?=$value_dp['name']?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -190,26 +195,26 @@ if(isset($_GET["s"])){
                    
                 <?php 
                 require('structure/datethai.php');
-                if(!empty($_GET['dp']) && empty($_GET['date']) && empty($strKeyword)){
-                $query = "SELECT * FROM `project` WHERE dp = '$valdp' " or die("Error:" . mysqli_error());
+                if(!empty($_GET['iddp']) && empty($_GET['date']) && empty($strKeyword)){
+                $query = "SELECT * FROM `project` WHERE iddp = '$valdp' " or die("Error:" . mysqli_error());
                 }
-                elseif(empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
+                elseif(empty($_GET['iddp']) && !empty($_GET['date']) && empty($strKeyword)){
                 $query = "SELECT * FROM `project` WHERE date = '$valdate' " or die("Error:" . mysqli_error());
                 }
-                elseif(empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
+                elseif(empty($_GET['iddp']) && empty($_GET['date']) && !empty($strKeyword)){
                 $query = "SELECT * FROM `project` WHERE name LIKE '%".$strKeyword."%' " or die("Error:" . mysqli_error());
                 }
-                elseif(!empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
-                $query = "SELECT * FROM `project` WHERE date = '$valdate' AND dp = '$valdp' " or die("Error:" . mysqli_error());
+                elseif(!empty($_GET['iddp']) && !empty($_GET['date']) && empty($strKeyword)){
+                $query = "SELECT * FROM `project` WHERE date = '$valdate' AND iddp = '$valdp' " or die("Error:" . mysqli_error());
                 }
-                elseif(empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
+                elseif(empty($_GET['iddp']) && !empty($_GET['date']) && !empty($strKeyword)){
                 $query = "SELECT * FROM `project` WHERE name LIKE '%".$strKeyword."%' AND date = '$valdate'" or die("Error:" . mysqli_error());
                 }
-                elseif(!empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
-                $query = "SELECT * FROM `project` WHERE name LIKE '%".$strKeyword."%' AND dp = '$valdp'" or die("Error:" . mysqli_error());
+                elseif(!empty($_GET['iddp']) && empty($_GET['date']) && !empty($strKeyword)){
+                $query = "SELECT * FROM `project` WHERE name LIKE '%".$strKeyword."%' AND iddp = '$valdp'" or die("Error:" . mysqli_error());
                 }
-                elseif(!empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
-                $query = "SELECT * FROM `project` WHERE name LIKE '%".$strKeyword."%' AND dp = '$valdp' AND date = '$valdate' " or die("Error:" . mysqli_error());
+                elseif(!empty($_GET['iddp']) && !empty($_GET['date']) && !empty($strKeyword)){
+                $query = "SELECT * FROM `project` WHERE name LIKE '%".$strKeyword."%' AND iddp = '$valdp' AND date = '$valdate' " or die("Error:" . mysqli_error());
                 }
                 else{
                 $query = "SELECT * FROM `project` " or die("Error:" . mysqli_error());
@@ -249,20 +254,29 @@ if(isset($_GET["s"])){
                 $url =  $domain_no_path.$path_only;
                 if($num_rows != 0){ 
                 while($row = mysqli_fetch_array($result)){ 
-                    if($row["tempate"] != ''){
-                        $image = ''.$url.'./upload/tempate/' .$row["tempate"].'';
+                    if($row["preview"] != ''){
+                        $image = ''.$url.'/upload/preview/' .$row["preview"].'';
                         $imageData = base64_encode(file_get_contents($image));
                         $src = 'data: ' . ';base64,' . $imageData;
                     ?> 
 
-                        <div class="col-xl-3 col-xs-12 col-md-6 mb-4">   
-                            <div class="card h-90">
+                        <div class="col-xl-3 col-xs-12 col-md-6 mb-4 d-flex items-stretch">   
+                            <div class="card h-100">
                                 
-                            <img class="card-img-top" style="pointer-events: none;" src="<?=$src?>" alt="Certificate Preview">
+                            <img class="card-img-top" style="pointer-events: none;" height="100%" width="100%" src="<?=$src?>" alt="Certificate Preview">
                     
                             <div class="card-body">
                                 <h6 class="card-title" style="font-size : 16px;"><?=$row["name"]?></h6>
-                                <small class="card-text d-block" style="opacity: 0.7;"><?=$row["dp"]?></small>
+                                <small class="card-text d-block" style="opacity: 0.7;"><?php 
+                                 $iddp = $row["iddp"];
+                                 $sql_namedp = "SELECT * FROM dp WHERE id = '$iddp' ";
+                                 $res_namedp = mysqli_query($con, $sql_namedp);
+                                 while ($row_namedp = mysqli_fetch_assoc($res_namedp)) {
+                                     $name = $row_namedp['name'];
+                                     break;
+                                 }
+                                 echo $name;
+                                ?></small>
                                 <small class="card-text d-block" style="opacity: 0.6;"><i class="text-primary pr-1 far fa-calendar-minus"></i><?=DateThai($row["date"])?></small>
                                 
                                 <div class="text-center mt-1">
@@ -272,7 +286,8 @@ if(isset($_GET["s"])){
                             </div>
                         </div>                    
                     <?php } } ?>
-                <?php } elseif(!empty($_GET['dp']) || !empty($_GET['date']) || !empty($strKeyword)){ ?>
+
+                <?php } elseif(!empty($_GET['iddp']) || !empty($_GET['date']) || !empty($strKeyword)){ ?>
                     <div class="col-12">
                     <div class="alert alert-warning text-center" role="alert">
                         ไม่พบผลการค้นหา กรุณาลองเปลี่ยนคำค้นหาใหม่อีกครั้ง (404 Not Found)
@@ -285,171 +300,117 @@ if(isset($_GET["s"])){
                 <nav aria-label="...">
                  <ul class="pagination justify-content-center">
                     <?php
+                    
                     if($prev_page)
                     {
 
-                        if(!empty($_GET['dp']) && empty($_GET['date']) && empty($strKeyword)){
+                        if(!empty($_GET['iddp']) && empty($_GET['date']) && empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?dp=$valdp&p=$prev_page'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?iddp=$valdp&p=$prev_page'><</a>
                         </li>";
                         }
-                        elseif(empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
+                        elseif(empty($_GET['iddp']) && !empty($_GET['date']) && empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?date=$valdate&p=$prev_page'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?date=$valdate&p=$prev_page'><</a>
                         </li>";
                         }
-                        elseif(empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(empty($_GET['iddp']) && empty($_GET['date']) && !empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&p=$prev_page'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&p=$prev_page'><</a>
                         </li>";
                         }
-                        elseif(!empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
+                        elseif(!empty($_GET['iddp']) && !empty($_GET['date']) && empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?dp=$valdp&date=$valdate&p=$prev_page'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?iddp=$valdp&date=$valdate&p=$prev_page'><</a>
                         </li>";
                         }
-                        elseif(empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(empty($_GET['iddp']) && !empty($_GET['date']) && !empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&date=$valdate&p=$prev_page'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&date=$valdate&p=$prev_page'><</a>
                         </li>";
                         }
-                        elseif(!empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(!empty($_GET['iddp']) && empty($_GET['date']) && !empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&dp=$valdp'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&iddp=$valdp'><</a>
                         </li>";
                         }
-                        elseif(!empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(!empty($_GET['iddp']) && !empty($_GET['date']) && !empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&dp=$valdp&date=$valdate'><< ย้อนกลับ</a>
+                        <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&iddp=$valdp&date=$valdate'><</a>
                         </li>";
                         }
                         else{
-                            echo "
-                            <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?p=$prev_page'><< ย้อนกลับ</a>
-                            </li>";
+                                echo "
+                                <li class='page-item'>
+                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?p=$prev_page'><</a>
+                                </li>";
                         }   
                     }
-                    for($i=1; $i<=$num_pages; $i++){
-                        if($i != $page)
-                        {
-                            if(!empty($_GET['dp']) && empty($_GET['date']) && empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?dp=$valdp&p=$i'>$i</a>
-                                </li>";
-                                }
-                                elseif(empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?date=$valdate&p=$i'>$i</a>
-                                </li>";
-                                }
-                                elseif(empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&p=$i'>$i</a>
-                                </li>";
-                                }
-                                elseif(!empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?dp=$valdp&date=$valdate&p=$i'>$i</a>
-                                </li>";
-                                }
-                                elseif(empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&date=$valdate&p=$i'>$i</a>
-                                </li>";
-                                }
-                                elseif(!empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&dp=$valdp'>$i</a>
-                                </li>";
-                                }
-                                elseif(!empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
-                                echo "
-                                <li class='page-item'>
-                                <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&dp=$valdp&date=$valdate'>$i</a>
-                                </li>";
-                                }
-                                else{
-                                    echo "
-                                    <li class='page-item'>
-                                    <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?p=$i'>$i</a>
-                                    </li>";
-                                }
-                        }
-                        else
-                        {
-                            echo "
-                            <li class='page-item active'><a tabindex='-1' class='page-link' >$i</a></li>
-                                ";
-                        }
+                    if($num_pages > 1){
+                        echo "<li class='page-item active'><a tabindex='-1' class='page-link' >$page</a></li>";
                     }
                     if($page != $num_pages)
                     {
-                        if(!empty($_GET['dp']) && empty($_GET['date']) && empty($strKeyword)){
+                        if(!empty($_GET['iddp']) && empty($_GET['date']) && empty($strKeyword)){
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?dp=$valdp&p=$next_page'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?iddp=$valdp&p=$next_page'>></a>
                             </li>";
                         }
-                        elseif(empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
+                        elseif(empty($_GET['iddp']) && !empty($_GET['date']) && empty($strKeyword)){
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?date=$valdate&p=$next_page'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?date=$valdate&p=$next_page'>></a>
                             </li>";
                         }
-                        elseif(empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(empty($_GET['iddp']) && empty($_GET['date']) && !empty($strKeyword)){
                         echo "
                         <li class='page-item'>
-                        <a class='page-link' href='$_SERVER[SCRIPT_NAME]&s=$strKeyword'>ต่อไป >></a>
+                        <a class='page-link' href='$_SERVER[SCRIPT_NAME]&s=$strKeyword'>></a>
                         </li>";
                         }
-                        elseif(!empty($_GET['dp']) && !empty($_GET['date']) && empty($strKeyword)){
+                        elseif(!empty($_GET['iddp']) && !empty($_GET['date']) && empty($strKeyword)){
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?dp=$valdp&date=$valdate&p=$next_page'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?iddp=$valdp&date=$valdate&p=$next_page'>></a>
                             </li>";
                         }
-                        elseif(empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(empty($_GET['iddp']) && !empty($_GET['date']) && !empty($strKeyword)){
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&date=$valdate&p=$next_page'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&date=$valdate&p=$next_page'>></a>
                             </li>";
                         }
-                        elseif(!empty($_GET['dp']) && empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(!empty($_GET['iddp']) && empty($_GET['date']) && !empty($strKeyword)){
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&dp=$valdp&date=$valdate'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&iddp=$valdp&date=$valdate'>></a>
                             </li>";
                         }
-                        elseif(!empty($_GET['dp']) && !empty($_GET['date']) && !empty($strKeyword)){
+                        elseif(!empty($_GET['iddp']) && !empty($_GET['date']) && !empty($strKeyword)){
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&dp=$valdp'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?s=$strKeyword&iddp=$valdp'>></a>
                             </li>";
                         }
                         else{
                             echo "
                             <li class='page-item'>
-                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?p=$next_page'>ต่อไป >></a>
+                            <a tabindex='-1' class='page-link' href='$_SERVER[SCRIPT_NAME]?p=$next_page'>></a>
                             </li>";
                         }
 
                     }
                     $con = null;
                     ?>
+                    
                 </ul>
                 </nav>
             <?php } ?>

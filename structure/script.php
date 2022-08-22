@@ -43,6 +43,7 @@
 	<script type="text/javascript"  src="js/dataTables.responsive.min.js"></script> 
 	<script type="text/javascript"  src="js/responsive.bootstrap4.min.js"></script> 
 
-
+	<!-- DataTable Responsive-->  
+	<script type="text/javascript"  src="js/bootstrap-colorpicker.min.js"></script> 
 
 	
