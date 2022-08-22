@@ -124,7 +124,7 @@ if(!empty($_GET['id'])){
                     </li>
     
                     <li class="nav-item">
-                      <a data-toggle="modal" data-target="#login" >
+                      <a href="login.php" >
                         <i class="fas fa-lock"></i>
                         <p>ล็อกอิน</p>
                       </a>
@@ -222,38 +222,6 @@ if(!empty($_GET['id'])){
 </body>
 </html>
 
-<!-- Modal Login -->
-<div class="modal fade" id="login" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3> ล็อกอินเข้าสู่ผู้ดูแลระบบ</h3>
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-      </div>
-
-      <div class="modal-body">
-      
-            <form action="sql/index/checklogin.php" method="post">
-              <div class="mb-3">
-                  <label class="form-label" for="username">ผู้ใช้</label>
-                  <input class="form-control" type="text" name="username"  placeholder="ชื่อผู้ใช้" required>
-              </div>
-              <div class="mb-3">
-                  <label class="form-label" for="password">รหัสผ่าน</label>
-                  <input class="form-control" type="password" name="password" placeholder="รหัสผ่าน" required>
-              </div>
-              <div class="text-center">
-                  <button class="btn btn-primary" type="submit" name="login_user" >เข้าสู่ระบบ</button>
-              </div> 
-          </form>
-      </div>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Script DataTable - User -->
 <script>

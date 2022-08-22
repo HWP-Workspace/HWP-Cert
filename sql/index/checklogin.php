@@ -20,14 +20,12 @@
       if (mysqli_num_rows($result) == 1){
         
         $_SESSION['username'] = $username;
-        Header("Location: ../../admin.php");
+        echo "S";
 
       } 
             
     else{
-      $msg = "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง [ERR-CK-LOGIN]";
-      $_SESSION['msg_a'] = $msg;
-      header("Location: ../../index.php");	
+      echo "ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง [ERR-CK-LOGIN]";
     }
 
 }
