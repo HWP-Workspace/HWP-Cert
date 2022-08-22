@@ -909,11 +909,11 @@ function setBubble(range, bubble) {
 <!-- Lock Type/Size Upload - Excel-->
 <script>
   $("#file").change(function () {
-	var extall="csv,xlxs";
+	var extall="csv,xlsx";
 	file = document.import.file.value;
 	ext = file.split('.').pop().toLowerCase();
 	if(parseInt(extall.indexOf(ext)) < 0){	
-    swal("พบข้อผิดพลาด!", "กรุณาอัปโหลดไฟล์ xlxs, csv เท่านั้น", {
+    swal("พบข้อผิดพลาด!", "กรุณาอัปโหลดไฟล์ xlsx, csv เท่านั้น", {
     icon : "warning",
     buttons: {
       confirm: {
@@ -930,8 +930,13 @@ function setBubble(range, bubble) {
 </script>
 
 
-
-
+<!-- Srcript Print Cer -->
+<script>
+function PrintCer(id) {
+  var idpj = <?= $_GET['id'] ?> ;      
+  window.open('print.php?id=' + idpj  +'&'+ 'learn=' + id, '_blank')
+}
+</script>
 
 
 <script>

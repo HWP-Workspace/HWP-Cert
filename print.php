@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('connect.php');
 require('structure/numthai.php');
 require_once __DIR__ . '/vendor/autoload.php';
@@ -16,12 +17,16 @@ if(!empty($_GET['id'])){
     $num_ck_id = mysqli_num_rows($result_ck_id); 
   
     if($num_ck_id == 0){
+        $msg = "ไม่พบเกียรติบัตรของท่าน [ERR-CER]";
+        $_SESSION['msg_a'] = $msg;
         header("location:index.php");
       }
 
   
     }
     else{
+      $msg = "ไม่พบเกียรติบัตรของท่าน [ERR-CER]";
+      $_SESSION['msg_a'] = $msg;
       header("location:index.php");
     }
 
@@ -39,12 +44,16 @@ if(!empty($_GET['learn'])){
     $num_ck_learn = mysqli_num_rows($result_ck_learn); 
   
     if($num_ck_learn == 0){
+        $msg = "ไม่พบเกียรติบัตรของท่าน [ERR-CER]";
+        $_SESSION['msg_a'] = $msg;
         header("location:index.php");
       }
   
   
 }
     else{
+      $msg = "ไม่พบเกียรติบัตรของท่าน [ERR-CER]";
+      $_SESSION['msg_a'] = $msg;
       header("location:index.php");
 }
 
@@ -64,7 +73,17 @@ if(isset($_GET['id'])){
                    $img_data = $row_img['tempate'];
                    break;                  
   }
-  
+    if(empty($img_data)){
+      if(isset($_SESSION['username'])){
+      $msg = "กรุณาอัปโหลดเทมเพลต [ERR-TP-CER]";
+      $_SESSION['msg_w'] = $msg;
+      header("location:admin_pj.php?id=$idpj");
+      }else{
+        $msg = "เกียรติบัตรยังไม่เผยแพร่ [ERR-CER-PC]";
+        $_SESSION['msg_a'] = $msg;
+        header("location:index.php");
+      }
+    }
 }
 
 
