@@ -4,7 +4,7 @@ date_default_timezone_set('Asia/Bangkok');
 $host="localhost";
 $user="root";
 $passwd="";
-$db="cer";
+$db="cert";
 $con = new mysqli($host,$user,$passwd,$db);
 if($con->connect_error){
     die("Connection Failed :" .$con->connect_error);
