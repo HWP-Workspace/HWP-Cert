@@ -26,7 +26,8 @@ $result_nameschool = mysqli_query($con,$sql_nameschool);
 if (isset($_POST["import"]))
 {
        
-  $allowedFileType = ['application/vnd.ms-excel','text/xls','text/xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    $allowedFileType = ['application/vnd.ms-excel', 'text/xls', 'text/xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'application/vnd.ms-excel.sheet.macroEnabled.12'];
+
   
   if(in_array($_FILES["file"]["type"],$allowedFileType)){
 
