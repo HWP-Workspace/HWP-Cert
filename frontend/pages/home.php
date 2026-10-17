@@ -45,13 +45,14 @@ require FRONTEND_PATH . '/layouts/start.php';
 <div class="row justify-content-md-center">
     <?php foreach ($projects as $project): ?>
         <div class="col-xl-3 col-md-6 col-12 mb-4 d-flex">
-            <div class="card h-100 w-100">
+            <?php /* mb-0: ธีมใส่ margin ล่างให้ .card ซึ่งรวมกับ h-100 แล้วเกิดช่องว่างใต้ปุ่ม — ระยะห่างใช้ mb-4 ของคอลัมน์แทน */ ?>
+            <div class="card h-100 w-100 mb-0">
                 <img class="card-img-top" style="pointer-events: none;" src="<?= e(TemplateStorage::previewDataUri($project['preview'])) ?>" alt="ตัวอย่างเกียรติบัตร">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h6 class="card-title" style="font-size: 16px;"><?= e($project['name']) ?></h6>
                     <small class="card-text d-block op-7"><?= e($project['dp_name']) ?></small>
                     <small class="card-text d-block op-7"><i class="text-primary pr-1 far fa-calendar-minus"></i><?= thai_date($project['date']) ?></small>
-                    <div class="text-center mt-1">
+                    <div class="text-center mt-auto pt-2">
                         <a href="download.php?id=<?= (int) $project['id'] ?>&amp;p=<?= $currentPage ?>" class="btn btn-sm btn-primary">
                             <i class="fas fa-user mr-1"></i>รายชื่อ
                         </a>

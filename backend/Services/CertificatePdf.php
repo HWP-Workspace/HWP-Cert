@@ -37,7 +37,30 @@ final class CertificatePdf
         ]);
         $mpdf->WriteHTML(ob_get_clean());
 
-        $mpdf->Output('เกียรติบัตร ' . $participant['name'] . ' (' . $participant['idcer'] . ').pdf', 'I');
+        // ชื่อเอกสาร — Chrome ใช้เป็นชื่อแท็บของตัวแสดง PDF
+        $title = 'เกียรติบัตร ' . $participant['name'] . ' (' . $participant['idcer'] . ')';
+        $mpdf->SetTitle($title);
+
+        self::send(
+            $mpdf->Output('', \Mpdf\Output\Destination::STRING_RETURN),
+            $title,
+            'certificate-' . (int) $project['id'] . '-' . (int) $participant['id']
+        );
+    }
+
+    /**
+     * ส่ง PDF ไปแสดงในเบราว์เซอร์ — mPDF ใส่ชื่อไฟล์ภาษาไทยลง header ตรง ๆ ทำให้เบราว์เซอร์แสดงชื่อเพี้ยน
+     * จึงส่ง header เอง: ชื่อภาษาอังกฤษสำรอง + ชื่อภาษาไทยแบบเข้ารหัส (RFC 6266 filename*)
+     */
+    private static function send($pdf, $name, $asciiName)
+    {
+        $filename = str_replace(['/', '\\', '"', "\r", "\n"], ['-', '-', '', '', ''], $name) . '.pdf';
+
+        header('Content-Type: application/pdf');
+        header('Content-Length: ' . strlen($pdf));
+        header('Content-Disposition: inline; filename="' . $asciiName . '.pdf"; filename*=UTF-8\'\'' . rawurlencode($filename));
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        echo $pdf;
     }
 
     /** ข้อความแต่ละบรรทัดบนเกียรติบัตรตามรูปแบบโครงการ */
