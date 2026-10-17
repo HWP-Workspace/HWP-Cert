@@ -33,15 +33,23 @@ final class InstallController
             }
         );
 
+        if (!$state['canEditDatabase']) {
+            Session::flash('success', 'อัปเดตฐานข้อมูลสำเร็จ');
+            Response::success('อัปเดตฐานข้อมูลสำเร็จ', ['redirect' => 'admin.php']);
+        }
         Session::flash('success', 'ติดตั้งระบบสำเร็จ กรุณาเข้าสู่ระบบ');
         Response::success('ติดตั้งระบบสำเร็จ', ['redirect' => 'login.php']);
     }
 
+    /** ติดตั้งแล้ว → 404 / โหมดอัปเดต → ต้องเป็นผู้ดูแลระบบสูงสุด */
     private static function editableState()
     {
         $state = Installer::state();
         if ($state['installed']) {
-            throw HttpException::notFound('ระบบติดตั้งเรียบร้อยแล้ว');
+            throw HttpException::notFound();
+        }
+        if (!$state['canEditDatabase']) {
+            Auth::authorizeSuperAdmin();
         }
         return $state;
     }
@@ -73,6 +81,8 @@ final class InstallController
             throw HttpException::badRequest('รหัสผ่านไม่ตรงกัน');
         }
 
+        $logo = Request::file('logo', Logo::MAX_BYTES);
+
         return [
             'school_name'          => Request::requiredString('school_name', 'ชื่อหน่วยงาน/โรงเรียน'),
             'school_shortname'     => Request::requiredString('school_shortname', 'ชื่อย่อหน่วยงาน/โรงเรียน', 10),
@@ -80,6 +90,7 @@ final class InstallController
             'department_shortname' => Request::requiredString('department_shortname', 'ชื่อย่อกลุ่ม/งานหลัก', 50),
             'admin_name'           => Request::requiredString('admin_name', 'ชื่อผู้ดูแลระบบ', 100),
             'admin_password'       => $password,
+            'logo'                 => $logo !== null ? Logo::prepare($logo) : null,
         ];
     }
 }

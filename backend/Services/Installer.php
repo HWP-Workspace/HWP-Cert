@@ -4,8 +4,9 @@
  * ติดตั้ง/อัปเดตระบบ: ตรวจสอบความพร้อม, สร้างฐานข้อมูล, รัน migration, สร้างข้อมูลเริ่มต้น และเขียน config/config.php
  *
  * เมื่อติดตั้งเสร็จจะสร้างไฟล์ storage/installed.lock (เก็บชื่อ migration ล่าสุด)
- * - ไม่มีไฟล์ lock หรือมี migration ใหม่ → ทุกหน้าจะพาไปที่ install.php
- * - ต้องการตั้งค่าฐานข้อมูลใหม่ → ลบ storage/installed.lock แล้วเปิด install.php
+ * - ติดตั้งแล้ว → install.php ตอบ 404 เหมือนไม่มีไฟล์นี้
+ * - มี migration ใหม่ → ทุกหน้าจะพาไปที่ install.php ซึ่งต้องล็อกอินเป็นผู้ดูแลระบบสูงสุดก่อนจึงจะกดอัปเดตได้
+ * - ต้องการตั้งค่าฐานข้อมูลใหม่ → ลบ storage/installed.lock และ config/config.php แล้วเปิด install.php
  */
 final class Installer
 {
@@ -20,7 +21,8 @@ final class Installer
     /**
      * @return array [
      *   'installed'       => ติดตั้งเสร็จแล้ว (ห้ามเข้าหน้าติดตั้ง),
-     *   'canEditDatabase' => แก้ไขข้อมูลฐานข้อมูลได้ (ยังไม่มี config, เชื่อมต่อไม่ได้ หรือยังไม่มีผู้ดูแลระบบ),
+     *   'canEditDatabase' => แก้ไขข้อมูลฐานข้อมูลได้ (ยังไม่มี config, เชื่อมต่อไม่ได้ หรือยังไม่มีผู้ดูแลระบบ)
+     *                        false = โหมดอัปเดตอย่างเดียว (ต้องเป็นผู้ดูแลระบบสูงสุด),
      *   'needsSetup'      => ต้องกรอกข้อมูลหน่วยงานและผู้ดูแลระบบ (ยังไม่มีผู้ดูแลระบบ),
      *   'error'           => ข้อความเมื่อเชื่อมต่อฐานข้อมูลไม่ได้,
      * ]
@@ -37,7 +39,8 @@ final class Installer
             try {
                 $hasAdmin = self::hasAdmin();
             } catch (PDOException $e) {
-                $error = 'เชื่อมต่อฐานข้อมูลตาม config/config.php ไม่ได้: ' . $e->getMessage();
+                error_log((string) $e);
+                $error = 'เชื่อมต่อฐานข้อมูลตามไฟล์ config/config.php ไม่ได้ กรุณากรอกข้อมูลฐานข้อมูลใหม่';
             }
         }
 
@@ -59,7 +62,7 @@ final class Installer
             'storage/uploads/templates' => STORAGE_PATH . '/uploads/templates',
             'storage/uploads/previews'  => STORAGE_PATH . '/uploads/previews',
             'storage/throttle'          => STORAGE_PATH . '/throttle',
-            'public/assets/img/fav.ico' => PUBLIC_PATH . '/assets/img/fav.ico',
+            'public/uploads'            => PUBLIC_PATH . '/uploads',
         ];
         if ($writesConfig) {
             $writable = ['config/' => BASE_PATH . '/config'] + $writable;
@@ -165,6 +168,10 @@ final class Installer
         }
 
         Admin::create(Auth::SUPER_ADMIN_USERNAME, $setup['admin_password'], $setup['admin_name'], Auth::ROOT_DEPARTMENT_ID);
+
+        if ($setup['logo'] !== null) {
+            Logo::save($setup['logo']);
+        }
     }
 
     /** เขียน config/config.php โดยคงค่าอื่นที่เคยตั้งไว้ */
@@ -179,6 +186,11 @@ final class Installer
 
         if (file_put_contents(self::CONFIG_FILE, $content, LOCK_EX) === false) {
             throw new RuntimeException('Cannot write ' . self::CONFIG_FILE);
+        }
+
+        // OPcache อาจยังเก็บ config เดิมไว้ — ล้างทิ้งเพื่อให้หน้าถัดไปใช้ค่าใหม่ทันที (ไม่เช่นนั้นหน้าล็อกอินจะขาวจนกว่าจะรีเฟรช)
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate(self::CONFIG_FILE, true);
         }
     }
 }

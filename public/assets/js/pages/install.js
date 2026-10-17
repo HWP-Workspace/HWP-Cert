@@ -42,6 +42,13 @@ $(function () {
             });
     });
 
+    // แสดงตัวอย่างตราสัญลักษณ์ที่เลือก
+    $('#school-logo').on('change', function () {
+        if (this.files && this.files[0]) {
+            $('#logo-preview').attr('src', URL.createObjectURL(this.files[0]));
+        }
+    });
+
     // แก้ไขข้อมูลฐานข้อมูลแล้วต้องตรวจสอบใหม่
     $databaseInputs.on('input', resetCheck);
     resetCheck();

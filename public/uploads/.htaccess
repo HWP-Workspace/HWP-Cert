@@ -1,0 +1,11 @@
+# ไฟล์ที่ผู้ดูแลอัปโหลด (ตราสัญลักษณ์) — ห้ามรันสคริปต์ในโฟลเดอร์นี้
+Options -Indexes
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi|sh)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

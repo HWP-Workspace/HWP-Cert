@@ -9,8 +9,26 @@ function e($value)
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+/**
+ * URL path ของโฟลเดอร์ public/ ตามที่เบราว์เซอร์ต้องใช้ เช่น "/" (Document Root = public/)
+ * หรือ "/public/" (Document Root = โฟลเดอร์หลัก) — ใช้ SCRIPT_NAME เพราะเป็น path จริงของไฟล์
+ * แม้ request จะถูก rewrite มาจาก .htaccess (กรณี Plesk ที่ Nginx รัน .php เองแต่ส่ง / ให้ Apache)
+ */
+function base_url()
+{
+    $directory = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+    if (basename(dirname($_SERVER['SCRIPT_FILENAME'])) === 'api') {
+        $directory = dirname($directory);
+    }
+    return rtrim($directory, '/') . '/';
+}
+
+/** redirect — URL แบบ relative (เช่น 'admin.php') จะอ้างอิงจากโฟลเดอร์ public/ เสมอ */
 function redirect($url)
 {
+    if (!preg_match('#^(https?:)?/#', $url)) {
+        $url = base_url() . $url;
+    }
     header('Location: ' . $url);
     exit;
 }

@@ -9,3 +9,8 @@ storage/throttle/*
 
 # ติดตั้งระบบแล้ว (สร้างโดย install.php — ลบไฟล์นี้หากต้องการตั้งค่าฐานข้อมูลใหม่)
 storage/installed.lock
+
+# ตราสัญลักษณ์ที่ผู้ดูแลอัปโหลด
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/.htaccess

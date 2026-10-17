@@ -65,6 +65,15 @@ a {
     text-decoration: none !important;
 }
 
+/* ปุ่มที่เป็นลิงก์ (<a class="btn btn-...">) — ธีมกำหนด a:hover/a:focus เป็นสีฟ้า
+   ทำให้ตัวอักษรบนปุ่มกลายเป็นสีฟ้าเมื่อชี้/แตะ จึงคงสีขาวไว้ทุกสถานะ */
+a.btn-primary, a.btn-secondary, a.btn-success, a.btn-info, a.btn-warning, a.btn-danger,
+a.btn-primary:hover, a.btn-secondary:hover, a.btn-success:hover, a.btn-info:hover, a.btn-warning:hover, a.btn-danger:hover,
+a.btn-primary:focus, a.btn-secondary:focus, a.btn-success:focus, a.btn-info:focus, a.btn-warning:focus, a.btn-danger:focus,
+a.btn-primary:active, a.btn-secondary:active, a.btn-success:active, a.btn-info:active, a.btn-warning:active, a.btn-danger:active {
+    color: #fff !important;
+}
+
 .range-wrap {
     position: relative;
     margin: 0 auto 3rem;

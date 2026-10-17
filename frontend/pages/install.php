@@ -19,7 +19,7 @@ $page = ['scripts' => ['pages/install.js']];
 <body class="bg-light">
 <div class="container py-5" style="max-width: 760px;">
     <div class="text-center mb-4">
-        <img src="assets/img/fav.ico" width="80" height="80" alt="">
+        <img src="<?= e(Logo::url()) ?>" width="80" height="80" alt="">
         <h2 class="mt-3 mb-1 fw-bold">ติดตั้งระบบพิมพ์เกียรติบัตรออนไลน์</h2>
         <p class="op-7">เวอร์ชัน <?= e(Config::get('app.version')) ?></p>
     </div>
@@ -115,6 +115,15 @@ $page = ['scripts' => ['pages/install.js']];
                             </div>
                         </div>
                         <small class="form-text text-muted">ชื่อย่อทั้งสองใช้รันเลขที่เกียรติบัตร เช่น ตว.งคพ.2568.1/1</small>
+
+                        <label class="mt-3" for="school-logo">ตราสัญลักษณ์ (ไม่บังคับ — .png, .jpg หรือ .ico ไม่เกิน 2 MB เปลี่ยนภายหลังได้ในหน้าตั้งค่า)</label>
+                        <div class="d-flex align-items-center">
+                            <img id="logo-preview" src="<?= e(Logo::url()) ?>" width="64" height="64" class="mr-3" alt="">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="school-logo" name="logo" accept=".png,.jpg,.jpeg,.ico" data-max-bytes="<?= Logo::MAX_BYTES ?>">
+                                <label class="custom-file-label" for="school-logo">เลือกไฟล์</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

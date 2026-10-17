@@ -24,15 +24,15 @@ require FRONTEND_PATH . '/layouts/start.php';
                 </div>
 
                 <div class="col-12">
-                    <label for="school-logo">อัปโหลดตราสัญลักษณ์หน่วยงาน/โรงเรียน (.ico เท่านั้น — เว้นว่างหากไม่ต้องการเปลี่ยน)</label>
+                    <label for="school-logo">อัปโหลดตราสัญลักษณ์หน่วยงาน/โรงเรียน (.png, .jpg หรือ .ico ไม่เกิน 2 MB — เว้นว่างหากไม่ต้องการเปลี่ยน)</label>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="school-logo" name="logo" accept=".ico" data-max-bytes="1048576">
-                        <label class="custom-file-label" for="school-logo">เลือกไฟล์ .ico เท่านั้น</label>
+                        <input type="file" class="custom-file-input" id="school-logo" name="logo" accept=".png,.jpg,.jpeg,.ico" data-max-bytes="<?= Logo::MAX_BYTES ?>">
+                        <label class="custom-file-label" for="school-logo">เลือกไฟล์</label>
                     </div>
 
                     <div class="text-center mt-5">
                         ตราสัญลักษณ์ (ปัจจุบัน)<br>
-                        <img class="mt-3" src="assets/img/fav.ico?v=<?= (int) @filemtime(PUBLIC_PATH . '/assets/img/fav.ico') ?>" height="150" width="150" alt="ตราสัญลักษณ์">
+                        <img class="mt-3" src="<?= e(Logo::url()) ?>" height="150" width="150" alt="ตราสัญลักษณ์">
                     </div>
                 </div>
             </div>

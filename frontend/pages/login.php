@@ -13,7 +13,7 @@
     <form class="form-signin" action="api/auth.php?action=login" method="post" data-ajax data-success="redirect" autocomplete="off">
         <?= Csrf::field() ?>
 
-        <img class="mb-3" src="assets/img/fav.ico" alt="" width="100" height="100">
+        <img class="mb-3" src="<?= e(Logo::url()) ?>" alt="" width="100" height="100">
         <h2 class="h2 mb-1">ล็อกอินเข้าสู่ระบบ</h2>
         <h3 class="h4 mb-3 op-7">ระบบพิมพ์เกียรติบัตรออนไลน์</h3>
 

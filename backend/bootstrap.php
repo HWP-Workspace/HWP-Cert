@@ -9,6 +9,13 @@ define('FRONTEND_PATH', BASE_PATH . '/frontend');
 define('PUBLIC_PATH', BASE_PATH . '/public');
 define('STORAGE_PATH', BASE_PATH . '/storage');
 
+// ทุก request ต้องเข้าผ่านไฟล์ใน public/ เท่านั้น — กันการเรียกไฟล์ใน backend/ ตรง ๆ
+// บนเซิร์ฟเวอร์ที่ไม่อ่าน .htaccess (เช่น Nginx/Plesk ที่ Document Root ชี้มาที่โฟลเดอร์หลัก)
+if (PHP_SAPI !== 'cli' && strpos(str_replace('\\', '/', realpath($_SERVER['SCRIPT_FILENAME'])), str_replace('\\', '/', realpath(PUBLIC_PATH)) . '/') !== 0) {
+    http_response_code(404);
+    exit;
+}
+
 if (PHP_VERSION_ID < 80200) {
     http_response_code(500);
     exit('ระบบต้องการ PHP 8.2 ขึ้นไป (ปัจจุบัน ' . PHP_VERSION . ')');
@@ -63,7 +70,13 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 Session::start();
 
 // ระบบยังไม่ได้ติดตั้ง หรือมี migration ใหม่ → ไปหน้าติดตั้ง (หน้า install.php กำหนด INSTALLER ไว้ก่อน require ไฟล์นี้)
-if (!defined('INSTALLER') && !Installer::isInstalled()) {
+// ยกเว้นหน้าล็อกอิน/ออกจากระบบ (กำหนด AVAILABLE_DURING_UPGRADE) ระหว่างรออัปเดต
+// เพื่อให้ผู้ดูแลระบบสูงสุดล็อกอินเข้าไปกดอัปเดตฐานข้อมูลได้
+if (
+    !defined('INSTALLER')
+    && !Installer::isInstalled()
+    && !(defined('AVAILABLE_DURING_UPGRADE') && !Installer::state()['canEditDatabase'])
+) {
     if (basename(dirname($_SERVER['SCRIPT_FILENAME'])) === 'api') {
         Response::error('ระบบยังไม่ได้ติดตั้ง กรุณาเปิดหน้า install.php', 503);
     }

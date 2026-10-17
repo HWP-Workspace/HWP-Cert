@@ -19,7 +19,7 @@
         <div class="content">
             <div class="panel-header bg-primary-gradient">
                 <div class="page-inner py-5 text-center">
-                    <img class="d-inline mb-3" src="assets/img/fav.ico" width="100" height="100" alt="">
+                    <img class="d-inline mb-3" src="<?= e(Logo::url()) ?>" width="100" height="100" alt="">
                     <h2 class="d-block text-white mb-1 fw-bold">ระบบพิมพ์เกียรติบัตรออนไลน์</h2>
                     <h5 class="d-inline text-white op-7 mb-2"><?= e(School::name()) ?></h5>
                 </div>
