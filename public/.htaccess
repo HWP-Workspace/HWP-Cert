@@ -1,0 +1,15 @@
+# เปิด RewriteEngine ไว้เพื่อหยุดไม่ให้กฎของโฟลเดอร์หลักทำงานซ้ำ (ป้องกัน redirect loop)
+Options -Indexes
+DirectoryIndex index.php
+RewriteEngine On
+
+# ห้ามเปิดไฟล์ .htaccess และไฟล์ซ่อนอื่น ๆ
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

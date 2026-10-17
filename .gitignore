@@ -1,4 +1,8 @@
-upload/preview/*
-!upload/preview/.htaccess
-upload/tempate/*
-!upload/tempate/.htaccess
+# ค่าตั้งค่าเซิร์ฟเวอร์ (มีรหัสผ่านฐานข้อมูล) — คัดลอกจาก config/config.example.php
+config/config.php
+
+# ไฟล์ที่ผู้ใช้อัปโหลด และข้อมูลชั่วคราวของระบบ
+storage/uploads/templates/*
+storage/uploads/previews/*
+storage/throttle/*
+!storage/**/.gitkeep

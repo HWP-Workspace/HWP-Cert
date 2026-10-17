@@ -42,10 +42,10 @@ class Png
 				if ($final[$i + $j * $qrSize + 1]) {
 					imagefilledrectangle(
 						$im,
-						($i - $minSize) * $s,
-						($j - $minSize) * $s,
-						($i - $minSize + 1) * $s - 1,
-						($j - $minSize + 1) * $s - 1,
+						(int) round(($i - $minSize) * $s),
+						(int) round(($j - $minSize) * $s),
+						(int) round(($i - $minSize + 1) * $s - 1),
+						(int) round(($j - $minSize + 1) * $s - 1),
 						$foregroundColor
 					);
 				}
@@ -57,7 +57,10 @@ class Png
 		$data = ob_get_contents();
 		ob_end_clean();
 
-		imagedestroy($im);
+		//This function has been DEPRECATED as of PHP 8.5.0
+		if (PHP_VERSION_ID < 80500) {
+			imagedestroy($im);
+		}
 
 		return $data;
 	}

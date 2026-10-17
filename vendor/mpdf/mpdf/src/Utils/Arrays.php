@@ -29,9 +29,10 @@ class Arrays
 	 *     [one, two]
 	 * ]
 	 * @param array $array
+	 * @param int|null $maxSize Max depth of the combinations
 	 * @return array
 	 */
-	public static function allUniqueSortedCombinations($array)
+	public static function allUniqueSortedCombinations($array, $maxSize = null)
 	{
 		$input = array_unique($array);
 		if (count($input) <= 1) {
@@ -46,6 +47,9 @@ class Arrays
 
 		$n = count($input);
 		for ($k = 2; $k <= $n; $k++) {
+			if ($maxSize && $k > $maxSize) {
+				break;
+			}
 			$combinations = array_merge($combinations, self::combinations($input, $k));
 		}
 
@@ -78,15 +82,48 @@ class Arrays
 			$combinations[] = $combination;
 
 			$anotherCombination = false;
+			$resetFromIndex = -1;
 			for ($i = $k - 1; $i >= 0; $i--) {
 				if ($indexes[$i] < $maxIndexes[$i]) {
 					$indexes[$i]++;
 					$anotherCombination = true;
 					break;
 				}
+				$resetFromIndex = $i;
+			}
+
+			if ($resetFromIndex > 0) {
+				for ($i = $resetFromIndex; $i < $k; $i++) {
+					$indexes[$i] = $indexes[$i - 1] + 1;
+				}
 			}
 		} while ($anotherCombination);
 
 		return $combinations;
+	}
+
+	/**
+	 * Merge arrays recursively, appending integer-like keys and merge string keys.
+	 *
+	 * @param array ...$arrays Arrays to merge
+	 * @return array Merged array
+	 */
+	public static function uniqueRecursiveMerge(...$arrays)
+	{
+		$results = array_shift($arrays);
+
+		foreach ($arrays as $array) {
+			foreach ($array as $key => $value) {
+				if ((string) $key === (string) ((int) $key)) {
+					$results[] = $value;
+				} elseif (is_array($value) && isset($results[$key]) && is_array($results[$key])) {
+					$results[$key] = self::uniqueRecursiveMerge($results[$key], $value);
+				} else {
+					$results[$key] = $value;
+				}
+			}
+		}
+
+		return $results;
 	}
 }

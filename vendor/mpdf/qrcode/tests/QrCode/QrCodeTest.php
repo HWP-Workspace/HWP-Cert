@@ -5,7 +5,7 @@ namespace Mpdf\QrCode;
 /**
  * @group unit
  */
-class QrCodeTest extends \PHPUnit\Framework\TestCase
+class QrCodeTest extends \Yoast\PHPUnitPolyfills\TestCases\TestCase
 {
 
 	public function testQrCodeAlnum()
@@ -45,28 +45,32 @@ class QrCodeTest extends \PHPUnit\Framework\TestCase
 		$this->assertFalse($qrCode->isBorderDisabled());
 	}
 
-	/**
-	 * @expectedException  \Mpdf\QrCode\QrCodeException
-	 */
 	public function testInvalidErrorCorrection()
 	{
+		$this->expectException(\Mpdf\QrCode\QrCodeException::class);
+
 		new QrCode('Invalid ECC', 'X');
 	}
 
-	/**
-	 * @expectedException  \Mpdf\QrCode\QrCodeException
-	 */
 	public function testEmptyValue()
 	{
+		$this->expectException(\Mpdf\QrCode\QrCodeException::class);
+
 		new QrCode('');
 	}
 
-	/**
-	 * @expectedException  \Mpdf\QrCode\QrCodeException
-	 */
 	public function testTooLongData()
 	{
+		$this->expectException(\Mpdf\QrCode\QrCodeException::class);
+
 		new QrCode(base64_encode(random_bytes(1024 * 3)));
+	}
+
+	public function testUndefinedIndex()
+	{
+		$value = '1234567890123456.gov.bcb.pix0114028268660001815204000053039865406119.925802BR5912Clip Oba Oba6013Monten Matriz62120508v10173176304F297';
+		$qr = new QrCode($value);
+		$this->assertInstanceOf(QrCode::class, $qr);
 	}
 
 }

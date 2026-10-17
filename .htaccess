@@ -1,4 +1,10 @@
+# ส่งทุก request ไปยังโฟลเดอร์ public/ — ใช้เมื่อตั้ง Document Root ไว้ที่โฟลเดอร์หลักของโปรเจกต์
+# (ถ้าตั้ง Document Root ชี้ไปที่ public/ ได้โดยตรง ไฟล์นี้จะไม่ถูกใช้งาน)
 Options -Indexes
 RewriteEngine On
+
+# บังคับใช้ HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+RewriteRule ^(.*)$ public/$1 [L]
