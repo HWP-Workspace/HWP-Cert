@@ -11,7 +11,7 @@ final class Session
         ini_set('session.use_strict_mode', '1');
         ini_set('session.use_only_cookies', '1');
 
-        session_name(Config::get('session.name', 'HWPCERT_SESSION'));
+        session_name(Config::get('session.name', 'CERT_SESSION'));
         session_set_cookie_params([
             'lifetime' => 0,
             'path'     => '/',

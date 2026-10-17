@@ -10,20 +10,41 @@ final class Database
     public static function connection()
     {
         if (self::$pdo === null) {
-            $dsn = sprintf(
-                'mysql:host=%s;dbname=%s;charset=%s',
-                Config::get('db.host'),
-                Config::get('db.name'),
-                Config::get('db.charset', 'utf8')
-            );
-
-            self::$pdo = new PDO($dsn, Config::get('db.user'), Config::get('db.pass'), [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
-            ]);
+            self::$pdo = self::connect(Config::get('db'));
         }
         return self::$pdo;
+    }
+
+    /**
+     * เชื่อมต่อฐานข้อมูลจากค่าที่กำหนด (ใช้ตอนติดตั้งระบบ ก่อนมีไฟล์ config)
+     *
+     * @param array $db ['host', 'port', 'name', 'user', 'pass', 'charset']
+     * @param bool  $selectDatabase false = เชื่อมต่อเฉพาะเซิร์ฟเวอร์ (สำหรับสร้างฐานข้อมูล)
+     */
+    public static function connect(array $db, $selectDatabase = true)
+    {
+        $dsn = sprintf(
+            'mysql:host=%s;port=%d;charset=%s',
+            $db['host'],
+            isset($db['port']) ? (int) $db['port'] : 3306,
+            isset($db['charset']) ? $db['charset'] : 'utf8'
+        );
+        if ($selectDatabase) {
+            $dsn .= ';dbname=' . $db['name'];
+        }
+
+        return new PDO($dsn, $db['user'], $db['pass'], [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_TIMEOUT            => 5,
+        ]);
+    }
+
+    /** ใช้ connection ที่สร้างไว้แล้ว (ตอนติดตั้งระบบ) */
+    public static function useConnection(PDO $pdo)
+    {
+        self::$pdo = $pdo;
     }
 
     public static function query($sql, array $params = [])

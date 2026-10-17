@@ -1,7 +1,12 @@
 <?php
+/**
+ * ค่าเริ่มต้นของระบบ — ไฟล์ config/config.php จะถูกสร้างอัตโนมัติจากหน้าติดตั้ง (install.php)
+ * ค่าใดที่ไม่ได้ระบุใน config/config.php จะใช้ค่าจากไฟล์นี้
+ */
 return [
     'db' => [
         'host'    => 'localhost',
+        'port'    => 3306,
         'name'    => 'cert',
         'user'    => 'root',
         'pass'    => '',
@@ -15,7 +20,7 @@ return [
     ],
 
     'session' => [
-        'name'         => 'HWPCERT_SESSION',
+        'name'         => 'CERT_SESSION',
         'idle_timeout' => 7200,
     ],
 

@@ -6,3 +6,6 @@ storage/uploads/templates/*
 storage/uploads/previews/*
 storage/throttle/*
 !storage/**/.gitkeep
+
+# ติดตั้งระบบแล้ว (สร้างโดย install.php — ลบไฟล์นี้หากต้องการตั้งค่าฐานข้อมูลใหม่)
+storage/installed.lock

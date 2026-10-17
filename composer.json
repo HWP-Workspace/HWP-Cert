@@ -1,6 +1,6 @@
 {
-    "name": "hwp/cert",
-    "description": "ระบบพิมพ์เกียรติบัตรออนไลน์ โรงเรียนหอวัง ปทุมธานี",
+    "name": "online-cert/online-cert",
+    "description": "ระบบพิมพ์เกียรติบัตรออนไลน์ สำหรับสถานศึกษาและหน่วยงาน",
     "type": "project",
     "license": "MIT",
     "require": {

@@ -9,12 +9,6 @@ define('FRONTEND_PATH', BASE_PATH . '/frontend');
 define('PUBLIC_PATH', BASE_PATH . '/public');
 define('STORAGE_PATH', BASE_PATH . '/storage');
 
-$configFile = BASE_PATH . '/config/config.php';
-if (!is_file($configFile)) {
-    http_response_code(500);
-    exit('ไม่พบไฟล์ config/config.php กรุณาคัดลอกจาก config/config.example.php');
-}
-
 if (PHP_VERSION_ID < 80200) {
     http_response_code(500);
     exit('ระบบต้องการ PHP 8.2 ขึ้นไป (ปัจจุบัน ' . PHP_VERSION . ')');
@@ -42,7 +36,12 @@ spl_autoload_register(function ($class) {
 
 require BACKEND_PATH . '/helpers.php';
 
-Config::load(require $configFile);
+// ค่าใน config/config.php (สร้างจากหน้าติดตั้ง) ทับค่าเริ่มต้นใน config.example.php
+$config = require BASE_PATH . '/config/config.example.php';
+if (is_file(Installer::CONFIG_FILE)) {
+    $config = array_replace_recursive($config, require Installer::CONFIG_FILE);
+}
+Config::load($config);
 
 date_default_timezone_set(Config::get('app.timezone'));
 error_reporting(E_ALL);
@@ -62,3 +61,11 @@ header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
 Session::start();
+
+// ระบบยังไม่ได้ติดตั้ง หรือมี migration ใหม่ → ไปหน้าติดตั้ง (หน้า install.php กำหนด INSTALLER ไว้ก่อน require ไฟล์นี้)
+if (!defined('INSTALLER') && !Installer::isInstalled()) {
+    if (basename(dirname($_SERVER['SCRIPT_FILENAME'])) === 'api') {
+        Response::error('ระบบยังไม่ได้ติดตั้ง กรุณาเปิดหน้า install.php', 503);
+    }
+    redirect('install.php');
+}

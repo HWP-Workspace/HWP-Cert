@@ -2,7 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 <meta name="csrf-token" content="<?= e(Csrf::token()) ?>">
-<title>ระบบพิมพ์เกียรติบัตรออนไลน์ - <?= e(School::name()) ?></title>
+<title>ระบบพิมพ์เกียรติบัตรออนไลน์ - <?= e(isset($pageTitle) ? $pageTitle : School::name()) ?></title>
 <link rel="icon" href="assets/img/fav.ico" type="image/x-icon">
 
 <script src="assets/vendor/atlantis/js/plugin/webfont/webfont.min.js"></script>
